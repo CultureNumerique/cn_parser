@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Liens entre modèles Escapad et modèles des LMS &mdash; documentation cnparser 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Recherche" href="search.html"/>
+    <link rel="top" title="documentation cnparser 1.0" href="index.html"/>
+        <link rel="next" title="Code API" href="code_api.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cnparser
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Guide d'utilisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syntaxe.html">Syntaxe et structuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Liens entre modèles Escapad et modèles des LMS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#correspondance-entre-edx-escapad">Correspondance entre EDX - Escapad</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#strategie-de-notation">Stratégie de notation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#les-images">Les images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#correspondance-des-modeles-escapad-et-moodle-ims">Correspondance des modèles Escapad et Moodle/IMS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#limitations-a-l-import-d-archives-ims-dans-moodle">Limitations à l’import d’archives IMS dans Moodle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correspondance-entre-les-modeles-moodle-et-esc-pad">Correspondance entre les modèles Moodle et Esc&#64;pad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Les images</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code_api.html">Code API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cnparser</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Liens entre modèles Escapad et modèles des LMS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/models_mapping.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="liens-entre-modeles-escapad-et-modeles-des-lms">
+<h1>Liens entre modèles Escapad et modèles des LMS<a class="headerlink" href="#liens-entre-modeles-escapad-et-modeles-des-lms" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Cette section est destinée à ceux qui souhaitent comprendre comment sont établies les correspondances entre les modèles de cours parsé depuis le markdown par Escapad et les cours exportés vers les LMS EDX et Moodle. Ces archives EDX ou IMSCC-Moodle sont téléchargeables depuis le site vitrine généré, dans la page de chaque module, section «&nbsp;Réutilisez ce module&nbsp;».</p>
+<div class="section" id="correspondance-entre-edx-escapad">
+<h2>Correspondance entre EDX - Escapad<a class="headerlink" href="#correspondance-entre-edx-escapad" title="Lien permanent vers ce titre">¶</a></h2>
+<p>La mapping se fait assez naturellement entre le modèle <a class="reference external" href="mailto:Esc&#37;&#52;&#48;Pad">Esc<span>&#64;</span>Pad</a> et le
+modèle EDX, même si le typage des activités et contenu ne se fait exactement
+au niveau de la sous-section mais sur celui du «&nbsp;component&nbsp;». Voir tableau ci-dessous.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">EDX element(:attribute)</th>
+<th class="head">correspondance dans le modèle <a class="reference external" href="mailto:Esc&#37;&#52;&#48;pad">Esc<span>&#64;</span>pad</a></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>chapter</td>
+<td>section</td>
+</tr>
+<tr class="row-odd"><td>sequential</td>
+<td>sous-section</td>
+</tr>
+<tr class="row-even"><td>sequential:display_name</td>
+<td>titre de la sous-section</td>
+</tr>
+<tr class="row-odd"><td>sequential:format</td>
+<td>type de ssection</td>
+</tr>
+<tr class="row-even"><td>sequential:graded (T/F)</td>
+<td>en fonction du type</td>
+</tr>
+<tr class="row-odd"><td>vertical («&nbsp;Unité&nbsp;»)</td>
+<td>1 seul «&nbsp;vertical&nbsp;» par sous-section</td>
+</tr>
+<tr class="row-even"><td>component</td>
+<td>type de contenu &gt; type de sous-section.</td>
+</tr>
+</tbody>
+</table>
+<p>Les sous-sections <a class="reference external" href="mailto:Esc&#37;&#52;&#48;pad">Esc<span>&#64;</span>pad</a> peuvent être de 4 types qui sont notées ou pas selon un
+type défini dans une «&nbsp;grading policy&nbsp;». Pour <a class="reference external" href="mailto:Esc&#37;&#52;&#48;Pad">Esc<span>&#64;</span>Pad</a> :</p>
+<ul class="simple">
+<li>(ungraded) : cours</li>
+<li>Compréhension : comprehension</li>
+<li>Activité : activite</li>
+<li>Activité Avancé : activite-avancee</li>
+</ul>
+<p>Ensuite chaque <code class="docutils literal"><span class="pre">sequential</span></code> peut avoir plusieurs <code class="docutils literal"><span class="pre">vertical</span></code> dénommés
+«&nbsp;Unité&nbsp;» dans l’interface, mais dans <a class="reference external" href="mailto:Esc&#37;&#52;&#48;pad">Esc<span>&#64;</span>pad</a> il n’y a qu’une “unité” par
+sous-section, et l’on se tient à un type de composant par Unité sauf pour les cours avec video qui auront un composant «&nbsp;Html&nbsp;» précédé d’un composant «&nbsp;cn-video&nbsp;» utilisant le plugin spécifique développé pour l’occasion <a class="reference external" href="https://github.com/CultureNumerique/xblock-cnvideo">xblock-cnvideo</a></p>
+<p>Chaque unité peut ensuite contenir différents composant EDX qui seront
+déterminé selon le contenu de la sous-section:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">composant EDX</th>
+<th class="head">Contenu d’une s-section</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>cnvideo</td>
+<td>video de cours = lien avec <code class="docutils literal"><span class="pre">{:</span> <span class="pre">.cours_video}</span></code></td>
+</tr>
+<tr class="row-odd"><td>html</td>
+<td>contenu de cours en HTML</td>
+</tr>
+<tr class="row-even"><td>problem</td>
+<td>quiz rédigés en GIFT</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="strategie-de-notation">
+<h3>Stratégie de notation<a class="headerlink" href="#strategie-de-notation" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Avec EDX il est possible de défninir :</p>
+<ul class="simple">
+<li>Le critère de «&nbsp;passation&nbsp;» du cours, ie la note globale minimale</li>
+<li>différents types d’exercices notés (ou de notation)</li>
+<li>pour chaque type:</li>
+<li>nombre mini à passer pour être évalué</li>
+<li>nombre d’exo que l’on peut sauter</li>
+<li>poids dans note globale</li>
+<li>nom et nom de code</li>
+</ul>
+<p>Tout ceci est défini dans le fichier de template
+<a class="reference external" href="../templates/toEDX/policies/course/grading_policy.json">templates/toEDX/policies/course/grading_policy.json</a></p>
+</div>
+<div class="section" id="les-images">
+<h3>Les images<a class="headerlink" href="#les-images" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Toutes les images dans EDX sont stockées dans un dossier <cite>static</cite> privé pour chaque cours.
+Dans le cours, les images ont comme adresse <cite>src = static/nom_de_image.ext</cite>.
+Lors de la création d’une archive EDX, on met toutes les images du module dans un dossier static
+qui lui-même est dans le dossier EDX (dans <cite>generateEDXArchiveLight</cite> de <cite>toEDX</cite>).
+On change ensuite la source html de chaque sous-sections(subsections.html_src) pour changer
+la référence des images (voir <cite>EDXMediaLinks()</cite> dans <cite>model.py</cite>)</p>
+</div>
+</div>
+<div class="section" id="correspondance-des-modeles-escapad-et-moodle-ims">
+<h2>Correspondance des modèles Escapad et Moodle/IMS<a class="headerlink" href="#correspondance-des-modeles-escapad-et-moodle-ims" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="limitations-a-l-import-d-archives-ims-dans-moodle">
+<h3>Limitations à l’import d’archives IMS dans Moodle<a class="headerlink" href="#limitations-a-l-import-d-archives-ims-dans-moodle" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Cette procédure d’import vers Moodle au format IMS Common Cartridge a
+quelques limitations :</p>
+<ul class="simple">
+<li>un bug affecte la version 3.0 de Moodle et <strong>empêche l’import
+d’archive IMS si les quiz intégré</strong> (au format
+<a class="reference external" href="http://www.imsglobal.org/question/qtiv1p2/imsqti_asi_bindv1p2.html#1439623">XMLIMS-QTI</a>)
+<strong>contiennent au moins une question Vrai/Faux</strong>. <a class="reference external" href="https://tracker.moodle.org/browse/MDL-53337">Ce bug a été signalé au groupe de developpement de
+Moodle</a>; un
+contournement a été inclu dans le code actuel de toIMS.py qui déclare
+les questions Vrai/Faux comme des questions à choix multiples
+(toIMS.py ~l.52).</li>
+<li>les <strong>paramétrages d’achèvement et de revue des quiz ne sont pas
+conservés</strong>. En effet ces paramètres spécifiques à Moodle ne sont pas
+capturés dans le format IMS. Le comportement limitant vient surtout
+de ce que <a class="reference external" href="https://docs.moodle.org/29/en/Common_module_settings">les paramètres
+globaux</a>,
+qui normalement sont utilisés comme paramètres par défaut lors de la
+création d’un nouveau quiz <strong>ne sont pas pris en compte lors de
+l’import IMSCC</strong>. Ce comportement semble plutôt anormal et <a class="reference external" href="https://tracker.moodle.org/browse/MDL-53422">a été
+signalé également</a></li>
+</ul>
+</div>
+<div class="section" id="correspondance-entre-les-modeles-moodle-et-esc-pad">
+<h3>Correspondance entre les modèles Moodle et <a class="reference external" href="mailto:Esc&#37;&#52;&#48;pad">Esc<span>&#64;</span>pad</a><a class="headerlink" href="#correspondance-entre-les-modeles-moodle-et-esc-pad" title="Lien permanent vers ce titre">¶</a></h3>
+<p>La correspondance entre les modèles de cours Moodle et le modèle choisi dans <a class="reference external" href="mailto:Esc&#37;&#52;&#48;pad">Esc<span>&#64;</span>pad</a> sont très proches car
+tous les 2 placent le typage des contenus pédagogiques au niveau de la sous-section. Voir ce tableau:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Moodle</th>
+<th class="head"><a class="reference external" href="mailto:Esc&#37;&#52;&#48;pad">Esc<span>&#64;</span>pad</a></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Section</td>
+<td>section</td>
+</tr>
+<tr class="row-odd"><td>Activité / Resource</td>
+<td>sous-section</td>
+</tr>
+<tr class="row-even"><td>Resource:page</td>
+<td>sous-section: Cours</td>
+</tr>
+<tr class="row-odd"><td>Activité:quiz</td>
+<td><p class="first">sous-section:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Compréhension</li>
+<li>Activité</li>
+<li>ActivitéAvancée</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Commentaire:</p>
+<ul class="simple">
+<li>Le découpage en section est identique</li>
+<li>Les sous-section de Cours sont traduites en Resource Moodel de type «&nbsp;page&nbsp;»</li>
+<li>les 3 types d’activités sont traduits en Activité Moodle de type Quiz.</li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h3>Les images<a class="headerlink" href="#id1" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Dans le dossier IMS, il y a un dossier static dans lequel on met ses images.
+Dans imsmanifest.xml:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Pour chaque image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">resource</span> <span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;img1&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;webcontent&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">file</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;static/nom_image1.png&quot;</span><span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">resource</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Pour chaque ressource utilisant les images, il faut ajouter les
+dépendances quand elles sont nécessaires.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">resource</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;webcontent/1-2presentation-des-deux-alphabets_webcontent.html&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;webcontent&quot;</span> <span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;doc_0_1&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">file</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;webcontent/1-2presentation-des-deux-alphabets_webcontent.html&quot;</span><span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="n">dependency</span> <span class="n">identifierref</span><span class="o">=</span><span class="s2">&quot;img1&quot;</span><span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="n">dependency</span> <span class="n">identifierref</span><span class="o">=</span><span class="s2">&quot;img2&quot;</span><span class="o">/&gt;</span>
+
+<span class="o">&lt;/</span><span class="n">resource</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div></blockquote>
+<dl class="docutils">
+<dt>Dans les fichiers html (dossier webcontent), il faut faire une référence avec src=&nbsp;&nbsp;»../static/image.png&nbsp;»</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">img</span> <span class="n">alt</span><span class="o">=</span><span class="s2">&quot;hiragana&quot;</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;../static/hira.gif&quot;</span><span class="o">/&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="code_api.html" class="btn btn-neutral float-right" title="Code API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CultureNumerique@UnivLille.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

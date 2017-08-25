@@ -1,0 +1,904 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>model &mdash; documentation cnparser 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Recherche" href="../search.html"/>
+    <link rel="top" title="documentation cnparser 1.0" href="../index.html"/>
+        <link rel="up" title="Code du module" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cnparser
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Guide d'utilisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntaxe.html">Syntaxe et structuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../models_mapping.html">Liens entre modèles Escapad et modèles des LMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_api.html">Code API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cnparser</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Code du module</a> &raquo;</li>
+        
+      <li>model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Code source de model</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># #####################################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#    Data model for Courses and Activities. The module provides</span>
+<span class="c1">#    parse tools for markdown files following the</span>
+<span class="c1">#    Culture Numérique guidelines. Outputs</span>
+<span class="c1">#       - JSON config file</span>
+<span class="c1">#       - HTML files (a cut out of the file in html and gift files,</span>
+<span class="c1">#                     orderered in a folder structure)</span>
+<span class="c1">#       - HTML views</span>
+<span class="c1">#       - IMSCC archive (Open EDX coming soon)</span>
+<span class="c1">#</span>
+<span class="c1"># #####################################################################################</span>
+
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">markdown</span>
+<span class="kn">import</span> <span class="nn">yattag</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="k">import</span> <span class="n">isclass</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">from</span> <span class="nn">slugify</span> <span class="k">import</span> <span class="n">slugify</span>
+<span class="kn">from</span> <span class="nn">pygiftparser</span> <span class="k">import</span> <span class="n">parser</span> <span class="k">as</span> <span class="n">pygift</span>
+
+<span class="kn">import</span> <span class="nn">cnparser.fromGift</span>  <span class="c1"># seems unused but used for the mondey patching</span>
+<span class="kn">from</span> <span class="nn">cnparser</span> <span class="k">import</span> <span class="n">toIMS</span>
+<span class="kn">from</span> <span class="nn">cnparser</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cnparser.settings</span> <span class="k">import</span> <span class="n">MARKDOWN_EXT</span><span class="p">,</span> <span class="n">DEFAULT_VIDEO_THUMB_URL</span><span class="p">,</span> <span class="n">DEFAULT_BASE_URL</span>
+
+
+<span class="c1"># Regexps</span>
+<span class="n">reEndHead</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^#\s.+$&#39;</span><span class="p">)</span>
+<span class="n">reStartSection</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^#\s+(?P&lt;title&gt;.*)$&#39;</span><span class="p">)</span>
+<span class="n">reStartSubsection</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^##\s+(?P&lt;title&gt;.*)$&#39;</span><span class="p">)</span>
+<span class="n">reStartActivity</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^```(?P&lt;type&gt;.*)$&#39;</span><span class="p">)</span>
+<span class="n">reEndActivity</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^```\s*$&#39;</span><span class="p">)</span>
+<span class="n">reMetaData</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^(?P&lt;meta&gt;([A-Z])+?):\s*(?P&lt;value&gt;.*)\s*$&#39;</span><span class="p">)</span>
+<span class="n">reVideosLink</span>  <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^\[(?P&lt;video_title&gt;.*)\]\s*\((?P&lt;video_link&gt;.*)\){:\s*\.cours_video\s*.*}&#39;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+
+<span class="c1"># Warning messages</span>
+<span class="n">DEFAULT_PLACEMENT_BODY</span> <span class="o">=</span> <span class="s2">&quot;[UTIL]Ce fragment de texte n&#39;a été placé dans aucune sous-section, placement automatique dans une sous-section </span><span class="se">\&quot;</span><span class="s2">Cours</span><span class="se">\&quot;</span><span class="s2">: &quot;</span>
+<span class="n">METADATA_NOT_FOUND</span> <span class="o">=</span> <span class="s2">&quot;[UTIL]Cette balise de Header ne correspond à aucun attribut modifiable, vérifier l&#39;orthographe/l&#39;existence de cette balise: &quot;</span>
+<span class="n">NOT_START_SECTION</span> <span class="o">=</span> <span class="s2">&quot;[UTIL]Cette partie de texte qui suit le header n&#39;est pas placée dans une section, mettez un </span><span class="se">\&quot;</span><span class="s2"># &lt;titre&gt;</span><span class="se">\&quot;</span><span class="s2"> après l&#39;en-tête: &quot;</span>
+
+<span class="c1"># Hiérarchie</span>
+<span class="n">hierarchie</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">goodActivity</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; utility function used with &#39;reStartActivity&#39;</span>
+<span class="sd">    regex pattern to determine wether the &#39;type&#39; variable</span>
+<span class="sd">    of the given matched pattern fits the name of class defined in this module</span>
+
+<span class="sd">    :param match: result of reStartActivity.match(some_parsed_line)</span>
+<span class="sd">          (see Regex expressions defined above)</span>
+<span class="sd">    :type match: re.MatchObject</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;é&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+    <span class="n">typeSection</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[ ._-]&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                         <span class="n">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">typeSection</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">typeSection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">isclass</span><span class="p">(</span><span class="n">act</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">act</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">class</span> <span class="nc">ComplexEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encoder for Json serialization: just delete recursive</span>
+<span class="sd">structures. Used in toJson instance methods&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Section</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Subsection</span><span class="p">):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;section&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">AnyActivity</span><span class="p">):</span>
+                <span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;questions&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">d</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Subsection"><a class="viewcode-back" href="../code_api.html#model.Subsection">[docs]</a><span class="k">class</span> <span class="nc">Subsection</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract class for any type of subsection: lectures and activities</span>
+
+<span class="sd">    :param section: section object to which this subsection belongs</span>
+<span class="sd">    :type section: Section object</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># class-wise instance counter</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">section</span>
+        <span class="c1"># mere string for display the subsection number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Subsection</span><span class="o">.</span><span class="n">num</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">videos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">medias</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Subsection</span><span class="o">.</span><span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="Subsection.getFilename"><a class="viewcode-back" href="../code_api.html#model.Subsection.getFilename">[docs]</a>    <span class="k">def</span> <span class="nf">getFilename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;returns the filename associated to this subsection</span>
+
+<span class="sd">        :param term: termination of the file (&#39;html&#39; or &#39;xml&#39;)</span>
+<span class="sd">        :type term: string</span>
+
+<span class="sd">         &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="n">term</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span></div>
+
+<div class="viewcode-block" id="Subsection.toGift"><a class="viewcode-back" href="../code_api.html#model.Subsection.toGift">[docs]</a>    <span class="k">def</span> <span class="nf">toGift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="Subsection.toXMLMoodle"><a class="viewcode-back" href="../code_api.html#model.Subsection.toXMLMoodle">[docs]</a>    <span class="k">def</span> <span class="nf">toXMLMoodle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Subsection.absolutizeMediaLinks"><a class="viewcode-back" href="../code_api.html#model.Subsection.absolutizeMediaLinks">[docs]</a>    <span class="k">def</span> <span class="nf">absolutizeMediaLinks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; returns the instance src attribute (i.e the bit of source</span>
+<span class="sd">            code corresponding to this subsection) modified so that relative</span>
+<span class="sd">            media links are turned absolute with the base_url</span>
+<span class="sd">            and the module name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\]\(\s*(\.\/)*\s*media/&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;](&#39;</span> <span class="o">+</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">base_url</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">module_name</span> <span class="o">+</span> <span class="s1">&#39;/media/&#39;</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Subsection.rebaseMediaLinks"><a class="viewcode-back" href="../code_api.html#model.Subsection.rebaseMediaLinks">[docs]</a>    <span class="k">def</span> <span class="nf">rebaseMediaLinks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; changes the media links in the html_src code to a new link</span>
+<span class="sd">        /&lt;modulename&gt;/media/ is converted into dest</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">module_name</span><span class="o">+</span><span class="s1">&#39;/media/&#39;</span><span class="p">),</span>
+                      <span class="n">dest</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Subsection.parseMediaLinks"><a class="viewcode-back" href="../code_api.html#model.Subsection.parseMediaLinks">[docs]</a>    <span class="k">def</span> <span class="nf">parseMediaLinks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse instance src  and search for video matches.</span>
+<span class="sd">           In case of a match, creates a video object and assign</span>
+<span class="sd">           it to self.videos list attribute.</span>
+
+<span class="sd">           returns True if the number of videos found is above 0,</span>
+<span class="sd">                   False otherwise&quot;&quot;&quot;</span>
+        <span class="n">media_findall</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;/media/(?P&lt;media_name&gt;.*)\)&#39;</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
+                                   <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">media_match</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">media_findall</span><span class="p">):</span>
+            <span class="n">new_media</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;media_name&#39;</span><span class="p">:</span> <span class="n">media_match</span><span class="p">,</span>
+                <span class="s1">&#39;media_id&#39;</span><span class="p">:</span> <span class="s1">&#39;img&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">medias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_media</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">media_findall</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Cours"><a class="viewcode-back" href="../code_api.html#model.Cours">[docs]</a><span class="k">class</span> <span class="nc">Cours</span><span class="p">(</span><span class="n">Subsection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class for a lecture.</span>
+<span class="sd">        If src is not empty and no file is given, then this means</span>
+<span class="sd">        that the content has already been parsed in Section.parse().</span>
+<span class="sd">        Else if a file pointer is given and param &#39;src&#39; is empty,</span>
+<span class="sd">        this means that Section.parse() has detected a new &#39;Cours&#39;</span>
+<span class="sd">        instance that we keep on parsing here.</span>
+
+<span class="sd">        :param section: containing section object</span>
+<span class="sd">                        (to be deleted in JSON representation,</span>
+<span class="sd">                        see ComplexEncoder class)</span>
+<span class="sd">        :type section: Section object</span>
+
+<span class="sd">        :param file: parsed file (default None)</span>
+<span class="sd">        :type file: File pointer</span>
+
+<span class="sd">        :param src: text string with source of the parsed subsection</span>
+<span class="sd">                    (default: empty string)</span>
+
+<span class="sd">        :param title: text string that gives the Cours title</span>
+<span class="sd">                      (default &#39;Cours&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Cours&#39;</span><span class="p">):</span>
+        <span class="n">Subsection</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;webcontent&#39;</span>
+        <span class="k">if</span> <span class="n">src</span><span class="p">:</span>
+            <span class="c1"># case when the content has already been parsed</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="n">src</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># case when only the begining of a Course has been</span>
+            <span class="c1"># detected, so we resume the parsing here</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parseVideoLinks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">absolutizeMediaLinks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parseMediaLinks</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Cours.parse"><a class="viewcode-back" href="../code_api.html#model.Cours.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read lines in file pointer `f` until:</span>
+
+<span class="sd">            - start of a new section</span>
+<span class="sd">            - start of another subsection</span>
+<span class="sd">            - start of a new (checked) activity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">reStartSection</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">reStartSubsection</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">)</span> <span class="p">:</span>
+            <span class="c1"># Is it really the end of the section?</span>
+            <span class="c1"># blocks that are not activities are included!</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">reStartActivity</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span> <span class="ow">and</span> <span class="n">goodActivity</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Cours.toHTML"><a class="viewcode-back" href="../code_api.html#model.Cours.toHTML">[docs]</a>    <span class="k">def</span> <span class="nf">toHTML</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback_option</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assign and return the html_src attribute,</span>
+<span class="sd">        i.e the html representation of this Course subsection</span>
+
+<span class="sd">        :param feedback_option: determines wether or not it must</span>
+<span class="sd">                include feedback and correct answer (default False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">MARKDOWN_EXT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">iframize_video_anchors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_src</span><span class="p">,</span>
+                                                     <span class="s1">&#39;lien_video&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">add_target_blank</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_src</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span></div>
+
+<div class="viewcode-block" id="Cours.parseVideoLinks"><a class="viewcode-back" href="../code_api.html#model.Cours.parseVideoLinks">[docs]</a>    <span class="k">def</span> <span class="nf">parseVideoLinks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse instance src  and search for video matches.</span>
+<span class="sd">        In case of a match, creates a video object and assign</span>
+<span class="sd">        it to self.videos list attribute.</span>
+
+<span class="sd">        :return: True if the number of videos found is greater than 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">videos_findall</span> <span class="o">=</span> <span class="n">reVideosLink</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">video_match</span> <span class="ow">in</span> <span class="n">videos_findall</span><span class="p">:</span>
+            <span class="n">new_video</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;video_title&#39;</span><span class="p">:</span> <span class="n">video_match</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;video_link&#39;</span><span class="p">:</span> <span class="n">video_match</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                <span class="s1">&#39;video_src_link&#39;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_video_src</span><span class="p">(</span><span class="n">video_match</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                <span class="s1">&#39;video_thumbnail&#39;</span><span class="p">:</span> <span class="n">DEFAULT_VIDEO_THUMB_URL</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">videos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_video</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">videos_findall</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cours.videoIframeList"><a class="viewcode-back" href="../code_api.html#model.Cours.videoIframeList">[docs]</a>    <span class="k">def</span> <span class="nf">videoIframeList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generates and returns a text string containing all</span>
+<span class="sd">           the iframe codes for a course subsection&quot;&quot;&quot;</span>
+        <span class="n">video_list</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">videos</span><span class="p">:</span>
+            <span class="n">video_list</span> <span class="o">+=</span> <span class="s1">&#39;&lt;iframe src=&#39;</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;video_src_link&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; width=&quot;500&quot; height=&quot;281&quot; frameborder=&quot;0&quot; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">video_list</span></div></div>
+
+
+<div class="viewcode-block" id="AnyActivity"><a class="viewcode-back" href="../code_api.html#model.AnyActivity">[docs]</a><span class="k">class</span> <span class="nc">AnyActivity</span><span class="p">(</span><span class="n">Subsection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for any activity.</span>
+<span class="sd">       Responsible for parsing questions from the gift code in src attribute</span>
+
+<span class="sd">    :param section:  containing section object (to be deleted in</span>
+<span class="sd">                     JSON representation, see ComplexEncoder class)</span>
+<span class="sd">    :type section: Section object</span>
+
+<span class="sd">    :param file:  parsed file (default None)</span>
+<span class="sd">    :type file: File pointer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="n">Subsection</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">absolutizeMediaLinks</span><span class="p">()</span>
+        <span class="c1"># need to transform String in File pointer with iter function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">questions</span> <span class="o">=</span> <span class="n">pygift</span><span class="o">.</span><span class="n">parseFile</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="kc">True</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parseMediaLinks</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AnyActivity.parse"><a class="viewcode-back" href="../code_api.html#model.AnyActivity.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read lines in file pointer f until the end of the activity&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">reEndActivity</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AnyActivity.toGift"><a class="viewcode-back" href="../code_api.html#model.AnyActivity.toGift">[docs]</a>    <span class="k">def</span> <span class="nf">toGift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a text string containing the gift code</span>
+<span class="sd">           of all the questions of this AnyActivity instance&quot;&quot;&quot;</span>
+        <span class="n">gift_src</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">questions</span><span class="p">:</span>
+            <span class="n">gift_src</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">question</span><span class="o">.</span><span class="n">source</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">gift_src</span></div>
+
+<div class="viewcode-block" id="AnyActivity.toHTML"><a class="viewcode-back" href="../code_api.html#model.AnyActivity.toHTML">[docs]</a>    <span class="k">def</span> <span class="nf">toHTML</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback_option</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assign and return the html_src attribute,</span>
+<span class="sd">           i.e. the concatenation of the HTML representation</span>
+<span class="sd">           of all questions of this activity.</span>
+
+<span class="sd">        :param feedback_option: wether or not output should</span>
+<span class="sd">              include feedbacks to the questions of the activity</span>
+<span class="sd">        :type feedback_option: Boolean</span>
+
+<span class="sd">        :rtype: text string with html code</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">yattag</span><span class="o">.</span><span class="n">Doc</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">questions</span><span class="p">:</span>
+            <span class="c1"># append each question to html output</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">toHTML</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">feedbacks</span><span class="o">=</span><span class="n">feedback_option</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">add_target_blank</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">html_src</span></div>
+
+<div class="viewcode-block" id="AnyActivity.toEdxProblemsList"><a class="viewcode-back" href="../code_api.html#model.AnyActivity.toEdxProblemsList">[docs]</a>    <span class="k">def</span> <span class="nf">toEdxProblemsList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns xml source code of all the questions in</span>
+<span class="sd">           EDX XML format. *depends on toEdx.py module*</span>
+
+<span class="sd">        :rtype: texte string of xml code</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">edx_xml_problem_list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">questions</span><span class="p">:</span>
+            <span class="n">edx_xml_problem_list</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">question</span><span class="o">.</span><span class="n">toEDX</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">edx_xml_problem_list</span></div>
+
+<div class="viewcode-block" id="AnyActivity.toXMLMoodle"><a class="viewcode-back" href="../code_api.html#model.AnyActivity.toXMLMoodle">[docs]</a>    <span class="k">def</span> <span class="nf">toXMLMoodle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the XML representation following IMS QTI</span>
+<span class="sd">        standard of all the questions in this activity.</span>
+<span class="sd">        *depends on toIMS.py module*</span>
+
+<span class="sd">        :rtype: texte string of xml code</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># a) depending on the type, get max number of attempts for the test</span>
+        <span class="c1"># FIXME : It is usefull?</span>
+        <span class="c1"># if isinstance(self, Comprehension):</span>
+        <span class="c1">#     max_attempts = &#39;1&#39;</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     max_attempts = &#39;unlimited&#39;</span>
+        <span class="c1"># b) write empty xml test file for moodle export</span>
+        <span class="k">return</span> <span class="n">toIMS</span><span class="o">.</span><span class="n">create_ims_test</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">questions</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">slugify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">),</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Comprehension"><a class="viewcode-back" href="../code_api.html#model.Comprehension">[docs]</a><span class="k">class</span> <span class="nc">Comprehension</span><span class="p">(</span><span class="n">AnyActivity</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Subclass of AnyActivity defining a &#39;compréhension&#39; type of activity&quot;&quot;&quot;</span>
+    <span class="n">actnum</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># specific counter for this subclass of AnyActivity</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
+        <span class="n">AnyActivity</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Compréhension&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;Comprehension&#39;</span>
+        <span class="n">Comprehension</span><span class="o">.</span><span class="n">actnum</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="Activite"><a class="viewcode-back" href="../code_api.html#model.Activite">[docs]</a><span class="k">class</span> <span class="nc">Activite</span><span class="p">(</span><span class="n">AnyActivity</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Subclass of AnyActivity defining a simple &#39;activité&#39; type of activity&quot;&quot;&quot;</span>
+    <span class="n">actnum</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># specific counter for this subclass of AnyActivity</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
+        <span class="n">AnyActivity</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Activité&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;Activite&#39;</span>
+        <span class="n">Activite</span><span class="o">.</span><span class="n">actnum</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="ActiviteAvancee"><a class="viewcode-back" href="../code_api.html#model.ActiviteAvancee">[docs]</a><span class="k">class</span> <span class="nc">ActiviteAvancee</span><span class="p">(</span><span class="n">AnyActivity</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Subclass of AnyActivity defining an &#39;activité avancée&#39;</span>
+<span class="sd">    type of activity&quot;&quot;&quot;</span>
+    <span class="n">actnum</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># specific counter for this subclass of AnyActivity</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
+        <span class="n">AnyActivity</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Activité avancée&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;ActiviteAvancee&#39;</span>
+        <span class="n">ActiviteAvancee</span><span class="o">.</span><span class="n">actnum</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="Section"><a class="viewcode-back" href="../code_api.html#model.Section">[docs]</a><span class="k">class</span> <span class="nc">Section</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class defining the section level in the course module model of Esc@pad</span>
+
+<span class="sd">    :param  title:  text string title</span>
+<span class="sd">    :type title: string</span>
+
+<span class="sd">    :param  f:  module source file pointer</span>
+<span class="sd">    :type f: File</span>
+
+<span class="sd">    :param  module_name:  text string of the module name</span>
+<span class="sd">    :type module_name: string</span>
+
+<span class="sd">    :param  base_url:  base url for building absolute paths</span>
+<span class="sd">                       for relative media</span>
+<span class="sd">                       (default: DEFAULT_BASE_URL defined in model.py)</span>
+<span class="sd">    :type base_url: string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">DEFAULT_BASE_URL</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Section</span><span class="o">.</span><span class="n">num</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module_name</span> <span class="o">=</span> <span class="n">module_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">Section</span><span class="o">.</span><span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">Subsection</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="Section.build_default_cours"><a class="viewcode-back" href="../code_api.html#model.Section.build_default_cours">[docs]</a>    <span class="k">def</span> <span class="nf">build_default_cours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a default Cours with text without subsections</span>
+
+<span class="sd">        :param body: Text which contains a part of class</span>
+<span class="sd">        :type body: String</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Cours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">text</span><span class="p">))</span></div>
+
+    <span class="c1"># FIXME : Beaucoup de if/else, changer les conditions &amp; regrouper tout</span>
+<div class="viewcode-block" id="Section.parse"><a class="viewcode-back" href="../code_api.html#model.Section.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read lines in file pointer &#39;f&#39; until the start of a new</span>
+<span class="sd">        section. If the start of a new subsection or new activity is</span>
+<span class="sd">        detected, parsing is continued in corresponding subsection</span>
+<span class="sd">        parse method that returns the newly created object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">:</span>
+            <span class="c1"># is it a new section ?</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">reStartSection</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="c1"># for sections with only text:</span>
+                <span class="k">if</span> <span class="n">body</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">build_default_cours</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+                    <span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># is it a new subsection ?</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">reStartSubsection</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                    <span class="c1"># should I create a subsection (text just below a section</span>
+                    <span class="c1"># or between activities</span>
+                    <span class="k">if</span> <span class="n">body</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">build_default_cours</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+                        <span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                    <span class="c1"># parsing is then continued in Cours parse method,</span>
+                    <span class="n">sub</span> <span class="o">=</span> <span class="n">Cours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+                    <span class="c1"># The next line is the last line read in the parse</span>
+                    <span class="c1"># of the subsection</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">lastLine</span>
+                    <span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># is it an activity</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">reStartActivity</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="n">act</span> <span class="o">=</span> <span class="n">goodActivity</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">act</span><span class="p">:</span>
+                            <span class="c1"># should I create a subsection (text just</span>
+                            <span class="c1"># below a section or between activities</span>
+                            <span class="k">if</span> <span class="n">body</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">build_default_cours</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+                                <span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+                            <span class="c1"># read a new line after the end of blocks</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Type d&#39;activité inconnu </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span><span class="p">)</span>
+                            <span class="n">body</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># no match, add the line to the body and read</span>
+                        <span class="c1"># a new line</span>
+                        <span class="n">body</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lastLine</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="c1"># If lastLine is empty (file is ending), we write the body in</span>
+        <span class="c1"># Cours Subsection</span>
+        <span class="k">if</span> <span class="n">body</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">build_default_cours</span><span class="p">(</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Section.toHTML"><a class="viewcode-back" href="../code_api.html#model.Section.toHTML">[docs]</a>    <span class="k">def</span> <span class="nf">toHTML</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback_option</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Triggers the HTML output generation for all subsections. Does not</span>
+<span class="sd">        return anything&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span><span class="p">:</span>
+            <span class="n">sub</span><span class="o">.</span><span class="n">toHTML</span><span class="p">(</span><span class="n">feedback_option</span><span class="p">)</span></div>
+
+
+    <span class="c1"># # FIXME: is this usefull ??</span>
+    <span class="c1"># def toCourseHTML(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;Loops through Cours subsections only.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     :rtype: a string concatenating subsections HTML output</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     courseHTML = &quot;&quot;</span>
+    <span class="c1">#     for sub in self.subsections:</span>
+    <span class="c1">#         if isinstance(sub, Cours):</span>
+    <span class="c1">#             courseHTML += &quot;\n\n&lt;!-- Subsection &quot;+sub.num+&quot; --&gt;\n&quot;</span>
+    <span class="c1">#             courseHTML += markdown.markdown(sub.src, MARKDOWN_EXT)</span>
+    <span class="c1">#     return courseHTML</span>
+
+<div class="viewcode-block" id="Section.toGift"><a class="viewcode-back" href="../code_api.html#model.Section.toGift">[docs]</a>    <span class="k">def</span> <span class="nf">toGift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a concatenation (text string) of the GIFT source code of</span>
+<span class="sd">        all questions of all activities in this section&quot;&quot;&quot;</span>
+        <span class="n">allGifts</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">AnyActivity</span><span class="p">):</span>
+                <span class="c1"># Add category here</span>
+                <span class="n">allGifts</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">$CATEGORY: $course$/Quiz Bank &#39;&quot;</span><span class="o">+</span><span class="n">sub</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">sub</span><span class="o">.</span><span class="n">title</span><span class="o">+</span><span class="s2">&quot;&#39;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="n">allGifts</span> <span class="o">+=</span> <span class="n">sub</span><span class="o">.</span><span class="n">toGift</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">allGifts</span></div>
+
+<div class="viewcode-block" id="Section.toVideoList"><a class="viewcode-back" href="../code_api.html#model.Section.toVideoList">[docs]</a>    <span class="k">def</span> <span class="nf">toVideoList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a text string containing all iframe code of all videos in</span>
+<span class="sd">        this section&quot;&quot;&quot;</span>
+        <span class="n">video_list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">Cours</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">videos</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">video_list</span> <span class="o">+=</span> <span class="n">sub</span><span class="o">.</span><span class="n">videoIframeList</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">video_list</span></div>
+
+<div class="viewcode-block" id="Section.toCourseHTMLVisualisation"><a class="viewcode-back" href="../code_api.html#model.Section.toCourseHTMLVisualisation">[docs]</a>    <span class="k">def</span> <span class="nf">toCourseHTMLVisualisation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loops through Cours subsections only.</span>
+
+<span class="sd">        :rtype: a string concatenating subsections HTML output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">courseHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">Cours</span><span class="p">):</span>
+                <span class="n">courseHTML</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&lt;!-- Subsection &quot;</span><span class="o">+</span><span class="n">sub</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s2">&quot; --&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">courseHTML</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&lt;h2&gt;&quot;</span><span class="o">+</span><span class="n">sub</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s2">&quot;. &quot;</span><span class="o">+</span><span class="n">sub</span><span class="o">.</span><span class="n">title</span><span class="o">+</span><span class="s2">&quot; &lt;/h2&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">courseHTML</span> <span class="o">+=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">MARKDOWN_EXT</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">courseHTML</span></div></div>
+
+
+<div class="viewcode-block" id="Module"><a class="viewcode-back" href="../code_api.html#model.Module">[docs]</a><span class="k">class</span> <span class="nc">Module</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Module structure.</span>
+
+<span class="sd">    :param  f:  module source file pointer</span>
+<span class="sd">    :type f: File</span>
+
+<span class="sd">    :param name:  module name</span>
+<span class="sd">    :type name: string</span>
+
+<span class="sd">    :param  base_url:  the base url to build absolute media paths</span>
+<span class="sd">                       (default to DEFAULT_BASE_URL)</span>
+<span class="sd">    :type base_url: string</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">DEFAULT_BASE_URL</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Section</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ims_archive_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="s1">&#39;fr&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Titre long&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menutitle</span> <span class="o">=</span> <span class="s1">&#39;Titre&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logo_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;static&#39;</span><span class="p">,</span> <span class="s1">&#39;img&#39;</span><span class="p">,</span> <span class="s1">&#39;help.png&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="s1">&#39;culture numerique&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">=</span> <span class="s1">&#39;http://culturenumerique.univ-lille3.fr/css/base.css&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">act_counter</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">actnum</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Comprehension</span><span class="p">,</span>
+                                                           <span class="n">Activite</span><span class="p">,</span>
+                                                           <span class="n">ActiviteAvancee</span><span class="p">]}</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Comprehension</span><span class="p">,</span> <span class="n">Activite</span><span class="p">,</span> <span class="n">ActiviteAvancee</span><span class="p">]:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">actnum</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Module.parseHead"><a class="viewcode-back" href="../code_api.html#model.Module.parseHead">[docs]</a>    <span class="k">def</span> <span class="nf">parseHead</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called by module.parse() method. Captures meta-data within the</span>
+<span class="sd">        first lines of the source file. Stops and return the first line</span>
+<span class="sd">        starting with #, which means the start of the first section</span>
+
+<span class="sd">        :param  f :  module source file pointer</span>
+<span class="sd">        :type f: File</span>
+
+<span class="sd">        :rtype: string, last line parsed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">l</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">l</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">reEndHead</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">reMetaData</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">):</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">METADATA_NOT_FOUND</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">l</span> <span class="o">!=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">NOT_START_SECTION</span> <span class="o">+</span> <span class="n">l</span><span class="p">)</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">l</span></div>
+
+<div class="viewcode-block" id="Module.toJson"><a class="viewcode-back" href="../code_api.html#model.Module.toJson">[docs]</a>    <span class="k">def</span> <span class="nf">toJson</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the JSON representation of the module object. Uses the</span>
+<span class="sd">custom ComplexEncoder class&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                          <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                          <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;: &#39;</span><span class="p">),</span>
+                          <span class="bp">cls</span><span class="o">=</span><span class="n">ComplexEncoder</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Module.parse"><a class="viewcode-back" href="../code_api.html#model.Module.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse module source file, starting by the head to retrieve the</span>
+<span class="sd">         meta-data. Read all the lines until the start of a new</span>
+<span class="sd">         section (see reStartSection regex). In this case, parsing is</span>
+<span class="sd">         continued in Section.parse() method that returns a new</span>
+<span class="sd">         Section object and the last line parsed. Parsing goes on</span>
+<span class="sd">         until that last line returned is not the start of a new</span>
+<span class="sd">         Section.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parseHead</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>  <span class="c1"># up to first section</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">reStartSection</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="n">l</span> <span class="ow">and</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">Section</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">),</span>
+                        <span class="n">f</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">lastLine</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">reStartSection</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">l</span><span class="p">)</span></div>
+        <span class="c1"># Si qqlch dans l and pas de match -&gt; pas trouvé de section pour démarrer -&gt; WARNING</span>
+
+<div class="viewcode-block" id="Module.toHTML"><a class="viewcode-back" href="../code_api.html#model.Module.toHTML">[docs]</a>    <span class="k">def</span> <span class="nf">toHTML</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback_option</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;triggers the generation of HTML output for all sections&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">toHTML</span><span class="p">(</span><span class="n">feedback_option</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Module.toGift"><a class="viewcode-back" href="../code_api.html#model.Module.toGift">[docs]</a>    <span class="k">def</span> <span class="nf">toGift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a text string with all questions of all</span>
+<span class="sd">            the activities of this modules object.</span>
+<span class="sd">            Can be used for import a questions bank into moodle&quot;&quot;&quot;</span>
+        <span class="n">questions_bank</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+            <span class="n">questions_bank</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">toGift</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">questions_bank</span></div>
+
+<div class="viewcode-block" id="Module.toVideoList"><a class="viewcode-back" href="../code_api.html#model.Module.toVideoList">[docs]</a>    <span class="k">def</span> <span class="nf">toVideoList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a text string with all video iframe codes &quot;&quot;&quot;</span>
+        <span class="n">video_list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+            <span class="n">video_list</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">toVideoList</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">video_list</span></div>
+
+<div class="viewcode-block" id="Module.toCourseHTMLVisualisation"><a class="viewcode-back" href="../code_api.html#model.Module.toCourseHTMLVisualisation">[docs]</a>    <span class="k">def</span> <span class="nf">toCourseHTMLVisualisation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;To CourseHTML with title (used for getting preview of the website)</span>
+
+<span class="sd">        :rtype: Returns a string of the concatenation of their HTML output&quot;&quot;&quot;</span>
+        <span class="n">courseHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+            <span class="n">courseHTML</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&lt;!-- Section &quot;</span><span class="o">+</span><span class="n">sec</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s2">&quot; --&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">courseHTML</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&lt;h1&gt; &quot;</span><span class="o">+</span><span class="n">sec</span><span class="o">.</span><span class="n">num</span><span class="o">+</span><span class="s2">&quot;. &quot;</span><span class="o">+</span><span class="n">sec</span><span class="o">.</span><span class="n">title</span><span class="o">+</span><span class="s2">&quot; &lt;/h1&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">courseHTML</span> <span class="o">+=</span> <span class="n">sec</span><span class="o">.</span><span class="n">toCourseHTMLVisualisation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">courseHTML</span></div></div>
+
+
+<div class="viewcode-block" id="CourseProgram"><a class="viewcode-back" href="../code_api.html#model.CourseProgram">[docs]</a><span class="k">class</span> <span class="nc">CourseProgram</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A course program is made of one or several course modules.</span>
+<span class="sd">        A CP is initiated from a repository containing global</span>
+<span class="sd">        paramaters file (logo.jpg, title.md, home.md)</span>
+<span class="sd">        and folders moduleX containing module file and medias</span>
+
+<span class="sd">        :param title: course title</span>
+<span class="sd">        :type title: string</span>
+
+<span class="sd">        :param repository: path to the folder containing the modules</span>
+<span class="sd">        :type repository: string</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">repository</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repository</span> <span class="o">=</span> <span class="n">repository</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logo_path</span> <span class="o">=</span> <span class="s1">&#39;logo.png&#39;</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CultureNumerique@UnivLille.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

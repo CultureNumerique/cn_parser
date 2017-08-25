@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Syntaxe et structuration &mdash; documentation cnparser 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Recherche" href="search.html"/>
+    <link rel="top" title="documentation cnparser 1.0" href="index.html"/>
+        <link rel="next" title="Installation" href="installation.html"/>
+        <link rel="prev" title="Guide d&#39;utilisation" href="usage.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cnparser
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Guide d'utilisation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Syntaxe et structuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#arborescence-et-structure-des-fichiers-sources">Arborescence et structure des fichiers sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sous-section-de-cours">Sous-section de cours</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#extension-markdown">Extension markdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ajouter-des-images-ou-des-fichiers-resources">Ajouter des images ou des fichiers resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ajouter-des-videos">Ajouter des Vidéos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remarque-sur-le-format-des-liens-vimeo">Remarque sur le format des liens Vimeo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sous-section-de-type-activite">Sous-section de type Activité</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reperer-les-activites">Repérer les activités</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#syntaxe-gift">Syntaxe GIFT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#contenu-des-questions-redigees-en-gift">Contenu des questions rédigées en GIFT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exemples-de-questions-redigees-en-gift">Exemples de questions rédigées en GIFT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models_mapping.html">Liens entre modèles Escapad et modèles des LMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_api.html">Code API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cnparser</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Syntaxe et structuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/syntaxe.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="syntaxe-et-structuration">
+<span id="syntaxe-et-structuration"></span><h1>Syntaxe et structuration<a class="headerlink" href="#syntaxe-et-structuration" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Nous détaillons ici la syntaxe adoptée pour la production de modules de cours à partir d'une arborescence de fichier source au format texte. Une arborescence type pouvant servir d'exemple est proposé dans le dépôt
+<a class="reference external" href="https://github.com/CultureNumerique/course_template"><code class="docutils literal"><span class="pre">course_template</span></code></a> incluant un exemple type de fichier source de cours  <a class="reference external" href="https://github.com/CultureNumerique/course_template/blob/master/module1/example_module1.md"><code class="docutils literal"><span class="pre">course_template/module1/example_module1.md</span></code></a></p>
+<div class="section" id="arborescence-et-structure-des-fichiers-sources">
+<span id="arborescence-et-structure-des-fichiers-sources"></span><h2>Arborescence et structure des fichiers sources<a class="headerlink" href="#arborescence-et-structure-des-fichiers-sources" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Pour fonctionner normalement, l'application web Escapad nécessite d'avoir accès à un dossier <code class="docutils literal"><span class="pre">depot_de_cours</span></code> structuré à minima de la manière suivante:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">depot_de_cours</span><span class="o">/</span>
+    <span class="o">-</span> <span class="n">moduleX</span><span class="o">/</span>
+        <span class="n">module_de_coursX</span><span class="o">.</span><span class="n">md</span>
+        <span class="n">media</span><span class="o">/</span>
+            <span class="o">-</span> <span class="n">img</span><span class="o">.</span><span class="n">jpg</span>
+            <span class="o">-</span> <span class="n">img2</span><span class="o">.</span><span class="n">png</span>
+    <span class="o">-</span> <span class="n">moduleY</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>Commentaires sur l'arborescence type:</p>
+<ul class="simple">
+<li>Un dépôt de cours peut contenir plusieurs modules de cours chacun contenu dans un dossier</li>
+<li>Pour chaque dossier de module de cours:<ul>
+<li>un seul fichier source de type MarkDown dont le suffixe est '.md'</li>
+<li>le <strong>dossier media est optionnel</strong>, mais doit être nommé <code class="docutils literal"><span class="pre">media</span></code>. Voir plus bas pour la gestion des images, mais nous recommandons de gérer les medias séparemment et d'utiliser préférablement des urls absolues pour une meilleure portabilité.</li>
+</ul>
+</li>
+</ul>
+<p>Le fichier source permettant de générer un cours (<code class="docutils literal"><span class="pre">module_de_coursX.md</span></code> dans notre exemple) peut se décompose en sections et sous-sections. Le niveau sous-sections constitue le niveau &quot;pivot&quot; de la structure d'un cours Culture NUmérique. Chaque sous-section peut être de 2 types:</p>
+<ul class="simple">
+<li>sous-section de cours, incluant ou pas une ou plusieurs videos</li>
+<li>sous-section d'activité, chacune de 3 types possibles:<ul>
+<li>auto-évaluation sous forme de quiz</li>
+<li>exercice autonome</li>
+<li>exercice d'approfondissement</li>
+</ul>
+</li>
+</ul>
+<p>A noter qu'optionnellement le fichier peut débuter par une section d'en-tête comprenant des paramètres tels que titre, langue, etc. Cette partie se place avant la première section et comporte les champs suivants:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TITLE</span><span class="p">:</span> <span class="n">Module</span> <span class="n">de</span> <span class="n">cours</span> <span class="n">test</span> <span class="mi">1</span> <span class="p">(</span><span class="n">Titre</span> <span class="n">long</span><span class="p">)</span>
+<span class="n">MENUTITLE</span><span class="p">:</span> <span class="n">Module</span> <span class="n">Test</span> <span class="mi">1</span> <span class="p">(</span><span class="n">Titre</span> <span class="n">court</span><span class="p">)</span>
+<span class="n">AUTHOR</span><span class="p">:</span> <span class="n">Culture</span> <span class="n">Numérique</span>
+<span class="n">LANGUAGE</span><span class="p">:</span> <span class="n">fr</span>
+
+<span class="c1"># Section 1</span>
+<span class="c1">## Sous-section 1.1</span>
+<span class="n">etc</span><span class="o">....</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sous-section-de-cours">
+<span id="sous-section-de-cours"></span><h2>Sous-section de cours<a class="headerlink" href="#sous-section-de-cours" title="Lien permanent vers ce titre">¶</a></h2>
+<p>C'est un type de sous-section simple consistant en du texte structuré à l'aide de la syntaxe markdown et qui peut inclure des liens, des images, ou des videos à partir de l'url de ces ressources additionelles. La syntaxe markdown de base est expliqué dans <a class="reference external" href="http://daringfireball.net/projects/markdown/syntax">ce récapitulatif</a>.</p>
+<div class="section" id="extension-markdown">
+<span id="extension-markdown"></span><h3>Extension markdown<a class="headerlink" href="#extension-markdown" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Pour compléter les spécifications du markdow, plusieurs variantes ont été développées. Nous incluons dans Esc&#64;pad, la variante de syntaxe <a class="reference external" href="https://michelf.ca/projects/php-markdown/extra/">&quot;PHP Markdown Extra&quot;</a>. Cetet variante permet par exemple de spécifier des attributs attachés à des éléments de la syntaxe (lien, titre, image, etc). Ces <a class="reference external" href="https://michelf.ca/projects/php-markdown/extra/#spe-attr">&quot;special attributes&quot;</a> permettent par exemple d'ajouter des classes CSS à une image ou à un bloc de texte, ou un titre:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>[link](http://example.com){: class=&quot;foo bar&quot; .titre title=&quot;Some title!&quot; }`  
+</pre></div>
+</div>
+<p>qui produit le HTML suivant:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;p&gt;&lt;a href=&quot;http://example.com&quot; class=&quot;foo bar titre&quot; title=&quot;Some title!&quot;&gt;link&lt;/a&gt;&lt;/p&gt;`  
+</pre></div>
+</div>
+<p><strong>Notez</strong> que pour ajouter des classes on peut soit spécifier <code class="docutils literal"><span class="pre">.une_classe</span></code> ou `class='une_classe``</p>
+</div>
+<div class="section" id="ajouter-des-images-ou-des-fichiers-resources">
+<span id="ajouter-des-images-ou-des-fichiers-resources"></span><h3>Ajouter des images ou des fichiers resources<a class="headerlink" href="#ajouter-des-images-ou-des-fichiers-resources" title="Lien permanent vers ce titre">¶</a></h3>
+<p>L'ajout d'images en Markdown se fait de la manière suivante:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>![une image](http://url.fr/de/mon.image.png)
+</pre></div>
+</div>
+<p>L'ajout d'autres types de ressources se fait via des liens hypertextes simples, par exemple un lien vers un fichier texte ressource:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">exempleLaTeX</span><span class="p">](</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">culturenumerique</span><span class="o">.</span><span class="n">univ</span><span class="o">-</span><span class="n">lille3</span><span class="o">.</span><span class="n">fr</span><span class="o">/</span><span class="n">module3</span><span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">exempleLaTeX</span><span class="o">.</span><span class="n">pdf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>À noter que dans les 2 cas, l'url peut être de 2 formes:</p>
+<ul class="simple">
+<li><strong>absolue</strong> e.g <code class="docutils literal"><span class="pre">https://culturenumerique.univ-lille3.fr/static/img/logo_plat_vert.svg</span></code></li>
+<li><strong>relative</strong> au dossier <code class="docutils literal"><span class="pre">media</span></code> (situé dans le même dossier de module) e.g. <code class="docutils literal"><span class="pre">media/logo_plat_vert.svg</span></code></li>
+</ul>
+<p><strong>REMARQUE IMPORTANTE SUR L'HÉBERGEMENT DES MEDIA</strong></p>
+<p>De manière générale <strong>nous recommendons d'utiliser des liens absolus pour insérer des images</strong> depuis une source stable (wikimedia, sites institutionnels, GED de l'université, etc.) ou une source que vous controllez (owncloud, serveur ftp, etc.). Cependant esc&#64;pad supporte tout à fait l'usage de liens relatifs au dossier <code class="docutils literal"><span class="pre">media</span></code> et dans ce cas:</p>
+<ul class="simple">
+<li>les liens relatifs sont transformés en lien absolus vers l'hébergement escapad du site généré. E.g <code class="docutils literal"><span class="pre">media/img.png</span></code> dans le dossier <code class="docutils literal"><span class="pre">module1</span></code> du dépot <code class="docutils literal"><span class="pre">github_com_culturenumerique_cn_modules</span></code> (slug du depôt) sera transformé en <code class="docutils literal"><span class="pre">http://escapad.univ-lille.fr/data/sites/github_com_culturenumerique_cn_modules/module1/media/img.png</span></code></li>
+<li><strong>les images et medias seront hébergés sur le serveur <code class="docutils literal"><span class="pre">escapad.univ-lille3.fr</span></code></strong>. Il n'y pas &quot;d'assemblage&quot;, c'est à dire que les images ou fichiers liés ne sont pas intégrés aux archives, et la disponibilité de ces ressources <strong>n'est pas garantie</strong>, le service Esc&#64;pad étant un service expérimental.</li>
+</ul>
+<p><strong>Positionnement et stylage des images</strong></p>
+<p>En utilisant la syntaxe &quot;special attributes&quot; vue ci-avant et permettant d'ajouter des attributs à des éléments,  il est possible d'ajouter du style à une image pour, par exemple, en diminuer la largeur, spécifier l'affichage, etc:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>![logo](https://culturenumerique.univ-lille3.fr/static/img/logo_plat_vert.svg){: style=&quot;width:30%;float:right;&quot;}
+</pre></div>
+</div>
+</div>
+<div class="section" id="ajouter-des-videos">
+<span id="ajouter-des-videos"></span><h3>Ajouter des Vidéos<a class="headerlink" href="#ajouter-des-videos" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Esc&#64;pad permet de traiter de manière spécifique les liens hypertext pointant vers une video hébergée (sur Viméo e.g) afin que la ou les videos soient intégrées directement dans le contenu. Pour qu'un lien vers une vidéo (Vimeo, et Canal-u.tv uniquement pour l'instant) soit reconnu comme video de cours,  on utilise le principe des <em>attribute lists</em> (cf ci-avant) en ajoutant la classe <code class="docutils literal"><span class="pre">cours_video</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Introduction</span> <span class="n">au</span> <span class="n">web</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">vimeo</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="mi">138623497</span><span class="p">){:</span> <span class="o">.</span><span class="n">cours_video</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>ou</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Introduction</span> <span class="n">au</span> <span class="n">web</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">vimeo</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="mi">138623497</span><span class="p">){:</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;cours_video&quot;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Ce lien doit être placé à l'intérieur d'une sous-section de cours, qui peut comporter plusieurs vidéos de cours.</p>
+<p>Ces liens vidéos font l'objet d'un traitement spécifique selon le type d'export:</p>
+<ul class="simple">
+<li>export Site Vitrine HTML: on génère un code d'iframe qui permet de lire le/les vidéo/s sans quitter la page courante;</li>
+<li>pour l'export Moodle/IMSCC, le plugin Viméo de Moodle permet de transformer le lien vidéo en iframe automatiquement:
+<img alt="video_moodle" src="_images/3.vue_cours_avec_video.png" /></li>
+<li>pour l'export EDX, les videos de cours sont intégrées en préambule du contenu de cours</li>
+</ul>
+</div>
+<div class="section" id="remarque-sur-le-format-des-liens-vimeo">
+<span id="remarque-sur-le-format-des-liens-vimeo"></span><h3>Remarque sur le format des liens Vimeo<a class="headerlink" href="#remarque-sur-le-format-des-liens-vimeo" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Les liens de videos Vimeo doivent être de la forme</p>
+<p><code class="docutils literal"><span class="pre">https://vimeo.com/1234568</span></code></p>
+<p>et non</p>
+<p><code class="docutils literal"><span class="pre">https://player.vimeo.com/video/1234568</span></code></p>
+<p>La 2e forme est celle du champ &quot;src&quot; des iframes vimeo, mais l'API Vimeo requiert la 1ère forme, et qui est le lien permettant de plus d'accéder à la page vimeo de la video, et donc d'accéder à la chaine, aux autres videos, de liker, partager, etc.</p>
+</div>
+</div>
+<div class="section" id="sous-section-de-type-activite">
+<span id="sous-section-de-type-activite"></span><h2>Sous-section de type Activité<a class="headerlink" href="#sous-section-de-type-activite" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="reperer-les-activites">
+<span id="reperer-les-activites"></span><h3>Repérer les activités<a class="headerlink" href="#reperer-les-activites" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Les sous-sections d'activités peuvent être de 3 types:</p>
+<ul class="simple">
+<li>auto-évaluation pour vérifier la compréhension du cours: <code class="docutils literal"><span class="pre">comprehension</span></code></li>
+<li>exercices de recherche autonome : <code class="docutils literal"><span class="pre">activité</span></code></li>
+<li>Exercices d'approfondissement: <code class="docutils literal"><span class="pre">activité-avancée</span></code></li>
+</ul>
+<p>Pour le découpage des sous-section d'activités, nous n'utilisons plus les <code class="docutils literal"><span class="pre">##</span></code> de la syntaxe markdown, mais les &quot;fenced code blocks&quot; en spécifiant le type d'activité  juste à côté des &quot;backticks&quot;:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>    ```comprehension
+
+    ```
+</pre></div>
+</div>
+<p>ou</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>    ```activité-avancée
+
+    ```
+</pre></div>
+</div>
+</div>
+<div class="section" id="syntaxe-gift">
+<span id="syntaxe-gift"></span><h3>Syntaxe GIFT<a class="headerlink" href="#syntaxe-gift" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Ces activités sont rédigées en GIFT; chaque question est séparée par une ligne vide. La syntaxe Gift a été proposé par l'équipde Moodle pour permettre de gagner du temps dans la rédaction de quizz et de tests. Cette syntaxe est disponible sur <a class="reference external" href="https://docs.moodle.org/2x/fr/Format_GIFT">cette page</a> (voir aussi plus bas une série d'exemples de questions en GIFT). Il s'agit d'un format &quot;texte&quot; qui peut donc s'éditer dans n'importe quel éditeur de texte.</p>
+<p>Exemple:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>    ```activité-avancée
+
+    ::Représentation numérique::La représentation numérique d&#39;un livre peut inclure des données qui ne se limitent pas au texte. Donnez quelques exemples
+    {
+    #### Le genre, la date de création, ...
+    }
+
+    ::Fonctionnalités d&#39;un éditeur de textes::
+    [html]&lt;p&gt;Parmi les  fonctionnalités suivantes, lesquelles sont possibles ?&lt;/p&gt;
+    {
+    ~%25%copier/couper/coller#tous les éditeurs le permettent
+    ~%25%rechercher et remplacer#très souvent disponible
+    ~%25%avancer de mots en mots#souvent par la conjonction CRTL-flèches
+    ~%25%corriger l&#39;orthographe#certains le font
+    ~%-100%mettre en gras#l&#39;éditeur ne permet pas d&#39;enregistrer des mises en forme (il est possible toutefois d&#39;écrire des commandes de mise en forme : un mot n&#39;est pas en gras mais un texte dans un langage peut exprimer l&#39;ordre de mettre en gras)
+    }
+    ```
+</pre></div>
+</div>
+</div>
+<div class="section" id="contenu-des-questions-redigees-en-gift">
+<span id="contenu-des-questions-redigees-en-gift"></span><h3>Contenu des questions rédigées en GIFT<a class="headerlink" href="#contenu-des-questions-redigees-en-gift" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Au delà de la syntaxe spécifique à GIFT pour définir le texte des questions, les choix possibles, etc., la rédaction de ces contenus de questions présente quelques particularités:</p>
+<p><strong>Spécifier le format</strong>:</p>
+<p>Dans les questions rédigées en GIFT il est possible de rédiger le texte au format HTML ou Markdown en spécifiant devant chaque bloc la syntaxe (voir explications à la fin de <a class="reference external" href="https://docs.moodle.org/28/en/GIFT_format#Percentage_Answer_Weights">ce paragraphe de la documentation Moodle sur le format GIFT</a>).</p>
+<p><strong>Gestion des medias</strong>:</p>
+<p>Les consignes et recommandations sont les mêmes que dans la section ci-dessus [Ajouter des images ou des fichiers resources](#Ajouter-des-images-ou des-fichiers-resources).</p>
+<p><strong>Listes</strong>:</p>
+<p>Si le format choisi est le Markdown, il y a une limitation pour les listes (simples ou numérotées). En Markdown il faut laisser une ligne vide avant de commencer une liste:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Ingrédients</span><span class="p">:</span>
+
+<span class="o">-</span> <span class="n">carottes</span>
+<span class="o">-</span> <span class="n">pommes</span> <span class="n">de</span> <span class="n">terre</span>
+</pre></div>
+</div>
+<p>... or dans la spécification GIFT, une ligne vide sépare 2 questions distinctes. Les lignes vides pourront donc être indiquées dans un énoncé en GIFT avec le caractère de retour à la ligne &quot;echappé&quot; <code class="docutils literal"><span class="pre">\n</span></code>. Par exemple:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Ingrédients</span><span class="p">:</span>
+\<span class="n">n</span>
+<span class="o">-</span> <span class="n">carottes</span>
+<span class="o">-</span> <span class="n">pommes</span> <span class="n">de</span> <span class="n">terre</span>
+</pre></div>
+</div>
+<p>Qui permettra donc d'avoir une liste dans l'export HTML:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Ingrédients</span><span class="p">:</span>
+<span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">carottes</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="n">pommes</span> <span class="n">de</span> <span class="n">terre</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exemples-de-questions-redigees-en-gift">
+<span id="exemples-de-questions-redigees-en-gift"></span><h3>Exemples de questions rédigées en GIFT<a class="headerlink" href="#exemples-de-questions-redigees-en-gift" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span>
+// Vraie/Faux (la bonne réponse est FAUX) avec feedback, le tout rédigé en texte simple
+
+::Il n&#39;existe qu&#39;une façon seule façon de représenter numériquement un livre::
+{F# représenter une information est le résultat de nombreux choix}
+
+
+// Question ouverte (champ texte libre) avec feedback global, rédigé en texte simple
+
+::Donnez des exemples de critères qui peuvent gouverner le choix d&#39;une représentation numérique::
+{#### la concision, la pertinence (permettre des traitements voulus), l&#39;efficacité (les traitements sont réalisés rapidement, la confidentialité (l&#39;accès aux données  peut être contrôlé),...}
+
+// choix multiple avec feedback pour chaque réponse choisie, notez le choix du format markdown
+
+::Les choix de représentations sont faits par::
+[markdown]
+{
+~Les informaticiens#non pas seuls car intervient aussi l&#39;utilisation métier des objets représentés
+~Les experts métier#non pas seuls car il faut des spécialistes des données numériques et des algorithmes
+=Les deux#oui et souvent aussi des chercheurs, des entreprises, ...
+}
+
+// question à choix multiple (1 seul bonne réponse), avec texte+feedback global rédigé en HTML
+
+[html]&lt;p&gt;Que signifie &lt;em&gt;numérisation&lt;/em&gt; ?&lt;/p&gt;{
+=&lt;p&gt;L&#39;opération qui consiste à représenter sous forme de nombres une
+information quelle qu&#39;elle soit.&lt;/p&gt;#&lt;p&gt;Oui !&lt;/p&gt;
+~&lt;p&gt;L&#39;opération qui consiste à citer tous les nombres (1, 2, 3, 4, ….).&lt;/p&gt;#&lt;p&gt;Non, citer tous les nombres c&#39;est compter...&lt;/p&gt;
+####&lt;p&gt;La numérisation est l&#39;opération qui consiste à représenter sous forme de nombres une information, quelle qu&#39;elle soit.&lt;/p&gt; }
+
+
+// question à choix multiple et plusieurs bonnes réponses, pondérées de manière équivalente, mais une mauvaise réponse qui ne ramène pas de points, avec texte+feedback global rédigé en HTML
+
+::Où sont les processeurs ?::
+[html]&lt;p&gt;Parmi ces objets, quels sont ceux équipés de
+processeur(s) \:&lt;/p&gt;
+{
+~%16.66667%&lt;p&gt;tablettes&lt;/p&gt;
+~%16.66667%&lt;p&gt;smartphones&lt;/p&gt;
+~%16.66667%&lt;p&gt;box ADSL&lt;/p&gt;
+~%16.66667%&lt;p&gt;lecteur mp3&lt;/p&gt;
+~%16.66667%&lt;p&gt;ordinateur&lt;/p&gt;
+~%16.66667%&lt;p&gt;calculatrice&lt;/p&gt;
+~&lt;p&gt;aucun&lt;/p&gt;#&lt;p&gt;Tous !&lt;/p&gt;
+####&lt;p&gt;Tous ces objets sont équipés de micro-processeurs !&lt;/p&gt; }
+
+
+// question de type &#39;Essay&#39;, ie. réponse texte libre, avec texte + feedback global (4#) rédigés en Markdown
+
+::Le numérique dans la société::
+[markdown]
+Le numérique, un enjeu pour les **citoyens du XXIème siècle** ...
+Le numérique nous concerne tous en tant que citoyen. Il permet de nouvelles choses en automatisant des procédures et en donnant accès à des données jusqu&#39;ici inexploitables. Mais numérique n&#39;est évidemment pas systématiquement synonyme de progrès. Il faut toujours réfléchir aux **finalités** des applications développées. Nous vous invitons à vous **documenter** et à réfléchir aux questions suivantes :
+ - Dans la **gestion de l‘énergie**: qu&#39;est-ce que la **troisième révolution industrielle** et pourquoi le numérique y contribue-t-il ?
+- En **politique et média** : Qu&#39;est-ce que la **vérification par les faits** (*fact-checking* en anglais) ? En quoi le numérique l&#39;a rendue possible / facile ?
+- En **citoyenneté** : Que signifie **vote électronique** et en quoi cela pose-t-il des questions essentielles ? Trouver au moins un *avantage* et un *inconvénient*.
+Après avoir fait vos recherches, répondez aux questions posées en **quelques lignes** et en indiquant les **liens** où vous avez trouvé ces informations.
+{####[markdown]
+Voici quelques liens que nous vous proposons mais que vous avez sûrement trouvés par vous-même :
+- À propos de la troisième révolution industrielle :
+  - [Troisième révolution industrielle](http://fr.wikipedia.org/wiki/Troisième_révolution_industrielle)
+  - [pasdecalais](http://www.latroisiemerevolutionindustrielleennordpasdecalais.fr)
+- En **politique et média** : Qu&#39;est-ce que la vérification par les faits (fact-checking en anglais) ? En quoi le numérique l&#39;a rendue possible / facile ?
+  - [vérification par les faits](http://fr.wikipedia.org/wiki/Vérification_par_les_faits)
+- En **citoyenneté** : Que signifie vote électronique et en quoi cela pose-t-il des questions essentielles ? Trouver au moins un avantage et un inconvénient.
+  - [arguments] (http://fr.wikipedia.org/wiki/Vote_électronique#Arguments_en_faveur)
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usage.html" class="btn btn-neutral" title="Guide d&#39;utilisation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CultureNumerique@UnivLille.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,1076 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Code API &mdash; documentation cnparser 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Recherche" href="search.html"/>
+    <link rel="top" title="documentation cnparser 1.0" href="index.html"/>
+        <link rel="prev" title="Liens entre modèles Escapad et modèles des LMS" href="models_mapping.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cnparser
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Guide d'utilisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syntaxe.html">Syntaxe et structuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models_mapping.html">Liens entre modèles Escapad et modèles des LMS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-documentation-of-model-py">Detailed documentation of <code class="docutils literal"><span class="pre">model.py</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#course-program">Course Program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#section">Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subsection">Subsection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cours">Cours</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#anyactivity">AnyActivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comprehension">Comprehension</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#activite">Activite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#activiteavancee">ActiviteAvancee</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#autres-modules">Autres modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cnparser">cnparser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fromGift">fromGift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-toEDX">toEDX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-toIMS">toIMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-toHTML">toHTML</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utils">utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cnparser</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Code API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/code_api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="code-api">
+<h1>Code API<a class="headerlink" href="#code-api" title="Lien permanent vers ce titre">¶</a></h1>
+<p>We document here the source code of the Escapad parser located in <code class="docutils literal"><span class="pre">src</span></code> folder. It is divided into 2 main parts:</p>
+<ol class="arabic simple">
+<li>the parser model located in <code class="docutils literal"><span class="pre">cnparser/model.py</span></code></li>
+<li>the rest of the parser code, that is the scripts that manipulate the files and generate the exports in Web, IMS and EDX formats</li>
+</ol>
+<div class="section" id="detailed-documentation-of-model-py">
+<h2>Detailed documentation of <code class="docutils literal"><span class="pre">model.py</span></code><a class="headerlink" href="#detailed-documentation-of-model-py" title="Lien permanent vers ce titre">¶</a></h2>
+<p>This file <code class="docutils literal"><span class="pre">model.py</span></code> contains the logic of the Escapad parser that parse a whle course directory to build a Course Program object.
+The order of presentation follows the building of Course Program structure whereby :</p>
+<ul class="simple">
+<li>a CourseProgram contains one or several modules and is stored in a repository (folder)</li>
+<li>A module is made of one source file that is parsed and optionnaly a media folder</li>
+<li>Each module has a header part for the metadata and is divided in Sections, each containing one or several activities (AnyActivity)</li>
+<li><dl class="first docutils">
+<dt>Each activity can be typed as</dt>
+<dd><ul class="first last">
+<li>Cours : can contain also video parts</li>
+<li><dl class="first docutils">
+<dt>AnyActivity that has 3 subclasses:</dt>
+<dd><ul class="first last">
+<li>Comprehension: for simple quizzes</li>
+<li>Activite (simple) : for simple exercises involving personnal research</li>
+<li>ActiviteAvancee : for more advanced activity involving both research and personnal reflexion</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="section" id="course-program">
+<h3>Course Program<a class="headerlink" href="#course-program" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="class">
+<dt id="model.CourseProgram">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">CourseProgram</code><span class="sig-paren">(</span><em>title</em>, <em>repository</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#CourseProgram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.CourseProgram" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>A course program is made of one or several course modules.
+A CP is initiated from a repository containing global
+paramaters file (logo.jpg, title.md, home.md)
+and folders moduleX containing module file and medias</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>title</strong> (<em>string</em>) – course title</li>
+<li><strong>repository</strong> (<em>string</em>) – path to the folder containing the modules</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module">
+<h3>Module<a class="headerlink" href="#module" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="class">
+<dt id="model.Module">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Module</code><span class="sig-paren">(</span><em>f</em>, <em>name</em>, <em>base_url='http://culturenumerique.univ-lille3.fr'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Module structure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>f</strong> (<em>File</em>) – module source file pointer</li>
+<li><strong>name</strong> (<em>string</em>) – module name</li>
+<li><strong>base_url</strong> (<em>string</em>) – the base url to build absolute media paths
+(default to DEFAULT_BASE_URL)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.Module.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module.parse" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Parse module source file, starting by the head to retrieve the
+meta-data. Read all the lines until the start of a new
+section (see reStartSection regex). In this case, parsing is
+continued in Section.parse() method that returns a new
+Section object and the last line parsed. Parsing goes on
+until that last line returned is not the start of a new
+Section.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Module.parseHead">
+<code class="descname">parseHead</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module.parseHead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module.parseHead" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Called by module.parse() method. Captures meta-data within the
+first lines of the source file. Stops and return the first line
+starting with #, which means the start of the first section</p>
+<p>:param  f :  module source file pointer
+:type f: File</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">string, last line parsed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Module.toCourseHTMLVisualisation">
+<code class="descname">toCourseHTMLVisualisation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module.toCourseHTMLVisualisation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module.toCourseHTMLVisualisation" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>To CourseHTML with title (used for getting preview of the website)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">Returns a string of the concatenation of their HTML output</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Module.toGift">
+<code class="descname">toGift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module.toGift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module.toGift" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns a text string with all questions of all
+the activities of this modules object.
+Can be used for import a questions bank into moodle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Module.toHTML">
+<code class="descname">toHTML</code><span class="sig-paren">(</span><em>feedback_option=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module.toHTML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module.toHTML" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>triggers the generation of HTML output for all sections</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Module.toJson">
+<code class="descname">toJson</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module.toJson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module.toJson" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns the JSON representation of the module object. Uses the
+custom ComplexEncoder class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Module.toVideoList">
+<code class="descname">toVideoList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Module.toVideoList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Module.toVideoList" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns a text string with all video iframe codes</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="section">
+<h3>Section<a class="headerlink" href="#section" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="class">
+<dt id="model.Section">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Section</code><span class="sig-paren">(</span><em>title</em>, <em>f</em>, <em>module_name</em>, <em>base_url='http://culturenumerique.univ-lille3.fr'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Section" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Class defining the section level in the course module model of <a class="reference external" href="mailto:Esc&#37;&#52;&#48;pad">Esc<span>&#64;</span>pad</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>title</strong> (<em>string</em>) – text string title</li>
+<li><strong>f</strong> (<em>File</em>) – module source file pointer</li>
+<li><strong>module_name</strong> (<em>string</em>) – text string of the module name</li>
+<li><strong>base_url</strong> (<em>string</em>) – base url for building absolute paths
+for relative media
+(default: DEFAULT_BASE_URL defined in model.py)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.Section.build_default_cours">
+<code class="descname">build_default_cours</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Section.build_default_cours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Section.build_default_cours" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Build a default Cours with text without subsections</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>body</strong> (<em>String</em>) – Text which contains a part of class</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Section.num">
+<code class="descname">num</code><em class="property"> = 1</em><a class="headerlink" href="#model.Section.num" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.Section.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Section.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Section.parse" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Read lines in file pointer “f” until the start of a new
+section. If the start of a new subsection or new activity is
+detected, parsing is continued in corresponding subsection
+parse method that returns the newly created object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Section.toCourseHTMLVisualisation">
+<code class="descname">toCourseHTMLVisualisation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Section.toCourseHTMLVisualisation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Section.toCourseHTMLVisualisation" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Loops through Cours subsections only.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">a string concatenating subsections HTML output</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Section.toGift">
+<code class="descname">toGift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Section.toGift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Section.toGift" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns a concatenation (text string) of the GIFT source code of
+all questions of all activities in this section</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Section.toHTML">
+<code class="descname">toHTML</code><span class="sig-paren">(</span><em>feedback_option=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Section.toHTML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Section.toHTML" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Triggers the HTML output generation for all subsections. Does not
+return anything</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Section.toVideoList">
+<code class="descname">toVideoList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Section.toVideoList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Section.toVideoList" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns a text string containing all iframe code of all videos in
+this section</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="subsection">
+<h3>Subsection<a class="headerlink" href="#subsection" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="class">
+<dt id="model.Subsection">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Subsection</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Subsection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Subsection" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Abstract class for any type of subsection: lectures and activities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>section</strong> (<em>Section object</em>) – section object to which this subsection belongs</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.Subsection.absolutizeMediaLinks">
+<code class="descname">absolutizeMediaLinks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Subsection.absolutizeMediaLinks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Subsection.absolutizeMediaLinks" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>returns the instance src attribute (i.e the bit of source
+code corresponding to this subsection) modified so that relative
+media links are turned absolute with the base_url
+and the module name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Subsection.getFilename">
+<code class="descname">getFilename</code><span class="sig-paren">(</span><em>term='html'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Subsection.getFilename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Subsection.getFilename" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>returns the filename associated to this subsection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>term</strong> (<em>string</em>) – termination of the file (“html” or “xml”)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Subsection.num">
+<code class="descname">num</code><em class="property"> = 1</em><a class="headerlink" href="#model.Subsection.num" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.Subsection.parseMediaLinks">
+<code class="descname">parseMediaLinks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Subsection.parseMediaLinks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Subsection.parseMediaLinks" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Parse instance src  and search for video matches.
+In case of a match, creates a video object and assign
+it to self.videos list attribute.</p>
+<dl class="docutils">
+<dt>returns True if the number of videos found is above 0,</dt>
+<dd>False otherwise</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Subsection.rebaseMediaLinks">
+<code class="descname">rebaseMediaLinks</code><span class="sig-paren">(</span><em>dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Subsection.rebaseMediaLinks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Subsection.rebaseMediaLinks" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>changes the media links in the html_src code to a new link
+/&lt;modulename&gt;/media/ is converted into dest</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Subsection.toGift">
+<code class="descname">toGift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Subsection.toGift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Subsection.toGift" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.Subsection.toXMLMoodle">
+<code class="descname">toXMLMoodle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Subsection.toXMLMoodle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Subsection.toXMLMoodle" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="cours">
+<h3>Cours<a class="headerlink" href="#cours" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Subclass of Subsection</p>
+<dl class="class">
+<dt id="model.Cours">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Cours</code><span class="sig-paren">(</span><em>section</em>, <em>file=None</em>, <em>src=''</em>, <em>title='Cours'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Cours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Cours" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Class for a lecture.
+If src is not empty and no file is given, then this means
+that the content has already been parsed in Section.parse().
+Else if a file pointer is given and param “src” is empty,
+this means that Section.parse() has detected a new “Cours”
+instance that we keep on parsing here.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>section</strong> (<em>Section object</em>) – containing section object
+(to be deleted in JSON representation,
+see ComplexEncoder class)</li>
+<li><strong>file</strong> (<em>File pointer</em>) – parsed file (default None)</li>
+<li><strong>src</strong> – text string with source of the parsed subsection
+(default: empty string)</li>
+<li><strong>title</strong> – text string that gives the Cours title
+(default “Cours”)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.Cours.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Cours.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Cours.parse" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Read lines in file pointer <cite>f</cite> until:</p>
+<ul class="simple">
+<li>start of a new section</li>
+<li>start of another subsection</li>
+<li>start of a new (checked) activity</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Cours.parseVideoLinks">
+<code class="descname">parseVideoLinks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Cours.parseVideoLinks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Cours.parseVideoLinks" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Parse instance src  and search for video matches.
+In case of a match, creates a video object and assign
+it to self.videos list attribute.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Retourne:</th><td class="field-body">True if the number of videos found is greater than 0</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Cours.toHTML">
+<code class="descname">toHTML</code><span class="sig-paren">(</span><em>feedback_option=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Cours.toHTML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Cours.toHTML" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Assign and return the html_src attribute,
+i.e the html representation of this Course subsection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>feedback_option</strong> – determines wether or not it must
+include feedback and correct answer (default False)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Cours.videoIframeList">
+<code class="descname">videoIframeList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Cours.videoIframeList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Cours.videoIframeList" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Generates and returns a text string containing all
+the iframe codes for a course subsection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="anyactivity">
+<h3>AnyActivity<a class="headerlink" href="#anyactivity" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Subclass of Subsection</p>
+<dl class="class">
+<dt id="model.AnyActivity">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">AnyActivity</code><span class="sig-paren">(</span><em>section</em>, <em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#AnyActivity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.AnyActivity" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Abstract class for any activity.</dt>
+<dd>Responsible for parsing questions from the gift code in src attribute</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>section</strong> (<em>Section object</em>) – containing section object (to be deleted in
+JSON representation, see ComplexEncoder class)</li>
+<li><strong>file</strong> (<em>File pointer</em>) – parsed file (default None)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.AnyActivity.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#AnyActivity.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.AnyActivity.parse" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Read lines in file pointer f until the end of the activity</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.AnyActivity.toEdxProblemsList">
+<code class="descname">toEdxProblemsList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#AnyActivity.toEdxProblemsList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.AnyActivity.toEdxProblemsList" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns xml source code of all the questions in</dt>
+<dd>EDX XML format. <em>depends on toEdx.py module</em></dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">texte string of xml code</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.AnyActivity.toGift">
+<code class="descname">toGift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#AnyActivity.toGift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.AnyActivity.toGift" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns a text string containing the gift code
+of all the questions of this AnyActivity instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.AnyActivity.toHTML">
+<code class="descname">toHTML</code><span class="sig-paren">(</span><em>feedback_option=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#AnyActivity.toHTML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.AnyActivity.toHTML" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Assign and return the html_src attribute,</dt>
+<dd>i.e. the concatenation of the HTML representation
+of all questions of this activity.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>feedback_option</strong> (<em>Boolean</em>) – wether or not output should
+include feedbacks to the questions of the activity</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type retourné:</th><td class="field-body">text string with html code</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.AnyActivity.toXMLMoodle">
+<code class="descname">toXMLMoodle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#AnyActivity.toXMLMoodle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.AnyActivity.toXMLMoodle" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns the XML representation following IMS QTI
+standard of all the questions in this activity.
+<em>depends on toIMS.py module</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">texte string of xml code</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="comprehension">
+<h3>Comprehension<a class="headerlink" href="#comprehension" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Subclass of AnyActivity</p>
+<dl class="class">
+<dt id="model.Comprehension">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Comprehension</code><span class="sig-paren">(</span><em>section</em>, <em>src</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Comprehension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Comprehension" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Subclass of AnyActivity defining a “compréhension” type of activity</p>
+<dl class="attribute">
+<dt id="model.Comprehension.actnum">
+<code class="descname">actnum</code><em class="property"> = 0</em><a class="headerlink" href="#model.Comprehension.actnum" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="activite">
+<h3>Activite<a class="headerlink" href="#activite" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Subclass of AnyActivity</p>
+<dl class="class">
+<dt id="model.Activite">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Activite</code><span class="sig-paren">(</span><em>section</em>, <em>src</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Activite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Activite" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Subclass of AnyActivity defining a simple “activité” type of activity</p>
+<dl class="attribute">
+<dt id="model.Activite.actnum">
+<code class="descname">actnum</code><em class="property"> = 0</em><a class="headerlink" href="#model.Activite.actnum" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="activiteavancee">
+<h3>ActiviteAvancee<a class="headerlink" href="#activiteavancee" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Subclass of AnyActivity</p>
+<dl class="class">
+<dt id="model.ActiviteAvancee">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">ActiviteAvancee</code><span class="sig-paren">(</span><em>section</em>, <em>src</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#ActiviteAvancee"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ActiviteAvancee" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Subclass of AnyActivity defining an “activité avancée”
+type of activity</p>
+<dl class="attribute">
+<dt id="model.ActiviteAvancee.actnum">
+<code class="descname">actnum</code><em class="property"> = 0</em><a class="headerlink" href="#model.ActiviteAvancee.actnum" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="autres-modules">
+<h2>Autres modules<a class="headerlink" href="#autres-modules" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Here we detail the code documentation of the rest of the Escapad parser.</p>
+<div class="section" id="module-cnparser">
+<span id="cnparser"></span><h3>cnparser<a class="headerlink" href="#module-cnparser" title="Lien permanent vers ce titre">¶</a></h3>
+</div>
+<div class="section" id="module-fromGift">
+<span id="fromgift"></span><h3>fromGift<a class="headerlink" href="#module-fromGift" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="function">
+<dt id="fromGift.aslistInteractionsIMS">
+<code class="descclassname">fromGift.</code><code class="descname">aslistInteractionsIMS</code><span class="sig-paren">(</span><em>self</em>, <em>doc</em>, <em>tag</em>, <em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#aslistInteractionsIMS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.aslistInteractionsIMS" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>return the list interactions in IMS form the class Answer
+(example : When someone have the good answer, or the bad.)
+Add XML in the yattag.doc</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fromGift.asownEDX">
+<code class="descclassname">fromGift.</code><code class="descname">asownEDX</code><span class="sig-paren">(</span><em>self</em>, <em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#asownEDX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.asownEDX" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Transforms the answers into XML EDX according to their type</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fromGift.aspossiblesAnswersIMS">
+<code class="descclassname">fromGift.</code><code class="descname">aspossiblesAnswersIMS</code><span class="sig-paren">(</span><em>self</em>, <em>doc</em>, <em>tag</em>, <em>text</em>, <em>rcardinality='Single'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#aspossiblesAnswersIMS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.aspossiblesAnswersIMS" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return the list of possible responses, example for
+SelectSet(unique good answer) and
+MultipleChoicesSet (one or many good answer(s)).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>rcardinality</strong> (<em>String</em>) – represent number of good answer(s)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fromGift.asscriptEDX">
+<code class="descclassname">fromGift.</code><code class="descname">asscriptEDX</code><span class="sig-paren">(</span><em>self</em>, <em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#asscriptEDX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.asscriptEDX" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>In EDX, we can add a python or javascript script.
+This method allow to add script in XML EDX.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fromGift.astoEDX">
+<code class="descclassname">fromGift.</code><code class="descname">astoEDX</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#astoEDX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.astoEDX" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>transform object question in XML problem for EDX,
+depends to Answer type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Retourne:</th><td class="field-body">The doc value of XML text problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type retourné:</th><td class="field-body">String</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fromGift.astoIMSFB">
+<code class="descclassname">fromGift.</code><code class="descname">astoIMSFB</code><span class="sig-paren">(</span><em>self</em>, <em>doc</em>, <em>tag</em>, <em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#astoIMSFB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.astoIMSFB" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>return the feedback for each answer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fromGift.mdToHtml">
+<code class="descclassname">fromGift.</code><code class="descname">mdToHtml</code><span class="sig-paren">(</span><em>text</em>, <em>doc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#mdToHtml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.mdToHtml" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Transform txt in markdown to html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>doc</strong> – yattag.doc()</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body">HTML text</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">String</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fromGift.toEDX">
+<code class="descclassname">fromGift.</code><code class="descname">toEDX</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fromGift.html#toEDX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fromGift.toEDX" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>produces an XML fragment for EDX, use toEDX from AnswerSet</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Retourne:</th><td class="field-body">The doc value of XML text problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type retourné:</th><td class="field-body">String</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-toEDX">
+<span id="toedx"></span><h3>toEDX<a class="headerlink" href="#module-toEDX" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="function">
+<dt id="toEDX.generateEDXArchive">
+<code class="descclassname">toEDX.</code><code class="descname">generateEDXArchive</code><span class="sig-paren">(</span><em>module</em>, <em>moduleOutDir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toEDX.html#generateEDXArchive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toEDX.generateEDXArchive" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Given a module object and destination dir, generate EDX archive</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="toEDX.generateEDXArchiveIO">
+<code class="descclassname">toEDX.</code><code class="descname">generateEDXArchiveIO</code><span class="sig-paren">(</span><em>module</em>, <em>mediaFiles</em>, <em>mediaNames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toEDX.html#generateEDXArchiveIO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toEDX.generateEDXArchiveIO" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Writes the EDX content in a zipfile and returns that zipfile.
+The structure of this archive is contained in a tree /&lt;EDX_DIRECTORY&gt;/
+(usually EDX_DIRECTORY=EDX) and returns the zipfile.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-toIMS">
+<span id="toims"></span><h3>toIMS<a class="headerlink" href="#module-toIMS" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="function">
+<dt id="toIMS.create_empty_ims_test">
+<code class="descclassname">toIMS.</code><code class="descname">create_empty_ims_test</code><span class="sig-paren">(</span><em>id</em>, <em>num</em>, <em>title</em>, <em>max_attempts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toIMS.html#create_empty_ims_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toIMS.create_empty_ims_test" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>create empty imsc test source code</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="toIMS.create_ims_test">
+<code class="descclassname">toIMS.</code><code class="descname">create_ims_test</code><span class="sig-paren">(</span><em>questions</em>, <em>test_id</em>, <em>test_title</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toIMS.html#create_ims_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toIMS.create_ims_test" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="toIMS.generateIMSArchive">
+<code class="descclassname">toIMS.</code><code class="descname">generateIMSArchive</code><span class="sig-paren">(</span><em>module</em>, <em>out_directory</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toIMS.html#generateIMSArchive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toIMS.generateIMSArchive" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Generate an IMS archive for a given module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>module_object</strong> – a module</li>
+<li><strong>out_directory</strong> – path of the output dir in which
+we create an IMS_DIRECTORY directory
+where out IMS data are located</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="toIMS.generateIMSArchiveIO">
+<code class="descclassname">toIMS.</code><code class="descname">generateIMSArchiveIO</code><span class="sig-paren">(</span><em>module</em>, <em>mediaFiles</em>, <em>mediaNames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toIMS.html#generateIMSArchiveIO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toIMS.generateIMSArchiveIO" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Writes the IMS content in a zipfile and returns that zipfile.
+The structure of this archive is contained in a tree /&lt;IMS_DIRECTORY&gt;/
+(usually IMS_DIRECTORY=IMS) and returns the zipfile as a StringIO.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="toIMS.generateIMSManifest">
+<code class="descclassname">toIMS.</code><code class="descname">generateIMSManifest</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toIMS.html#generateIMSManifest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toIMS.generateIMSManifest" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>parse m from config file “moduleX.config.json” and recreate
+imsmanifest.xml</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-toHTML">
+<span id="tohtml"></span><h3>toHTML<a class="headerlink" href="#module-toHTML" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="function">
+<dt id="toHTML.buildSite">
+<code class="descclassname">toHTML.</code><code class="descname">buildSite</code><span class="sig-paren">(</span><em>course_program</em>, <em>repoDir</em>, <em>outDir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toHTML.html#buildSite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#toHTML.buildSite" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Generate full site from result of parsing repository</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils">
+<span id="utils"></span><h3>utils<a class="headerlink" href="#module-utils" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="function">
+<dt id="utils.add_target_blank">
+<code class="descclassname">utils.</code><code class="descname">add_target_blank</code><span class="sig-paren">(</span><em>html_src</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#add_target_blank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.add_target_blank" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>add target=&nbsp;»_blank&nbsp;» attribute to anchors in html_src</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.cnslugify">
+<code class="descclassname">utils.</code><code class="descname">cnslugify</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#cnslugify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.cnslugify" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Meant to be used as a tag in Jinja2 template,
+return the input string «&nbsp;value&nbsp;» turned into slugified version</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.cntohtml">
+<code class="descclassname">utils.</code><code class="descname">cntohtml</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#cntohtml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.cntohtml" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>filter taking input in md or html and rendering it anyway</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.copyMediaDir">
+<code class="descclassname">utils.</code><code class="descname">copyMediaDir</code><span class="sig-paren">(</span><em>repoDir</em>, <em>moduleOutDir</em>, <em>module_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#copyMediaDir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.copyMediaDir" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Copy the media subdir if necessary to the dest</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.createDirs">
+<code class="descclassname">utils.</code><code class="descname">createDirs</code><span class="sig-paren">(</span><em>outDir</em>, <em>folders</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#createDirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.createDirs" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>create anew all dirs in folders within target outdir</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.create_empty_file_if_needed">
+<code class="descclassname">utils.</code><code class="descname">create_empty_file_if_needed</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#create_empty_file_if_needed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.create_empty_file_if_needed" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Create an empty file filepath if it does not exist.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.fetch_vimeo_thumb">
+<code class="descclassname">utils.</code><code class="descname">fetch_vimeo_thumb</code><span class="sig-paren">(</span><em>video_link</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#fetch_vimeo_thumb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.fetch_vimeo_thumb" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>fetch video thumbnail for vimeo videos</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>video_link</strong> (<em>String</em>) – url</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.get_embed_code_for_url">
+<code class="descclassname">utils.</code><code class="descname">get_embed_code_for_url</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#get_embed_code_for_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.get_embed_code_for_url" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>parses a given url and retrieve embed code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>url</strong> – url</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.get_video_src">
+<code class="descclassname">utils.</code><code class="descname">get_video_src</code><span class="sig-paren">(</span><em>video_link</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#get_video_src"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.get_video_src" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>get video src link for iframe embed.
+FIXME : Supports only vimeo and canal-u.tv so far</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.iframize_video_anchors">
+<code class="descclassname">utils.</code><code class="descname">iframize_video_anchors</code><span class="sig-paren">(</span><em>htmlsrc</em>, <em>anchor_class</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#iframize_video_anchors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.iframize_video_anchors" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>given a piece of html code, scan for video anchors
+filtered by given class and add corresponding video
+iframe code before each anchor
+nb. uses get_embed_code_for_url()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.prepareDestination">
+<code class="descclassname">utils.</code><code class="descname">prepareDestination</code><span class="sig-paren">(</span><em>BASE_PATH</em>, <em>outDir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#prepareDestination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.prepareDestination" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Create outDir and copy mandatory files</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.write_file">
+<code class="descclassname">utils.</code><code class="descname">write_file</code><span class="sig-paren">(</span><em>src</em>, <em>current_dir</em>, <em>target_folder</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.write_file" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>given a «&nbsp;src&nbsp;» source string, write a file with «&nbsp;name&nbsp;» located in
+«&nbsp;current_dir&nbsp;»/&nbsp;»target_folder&nbsp;»</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.writetarstr">
+<code class="descclassname">utils.</code><code class="descname">writetarstr</code><span class="sig-paren">(</span><em>tar</em>, <em>filepath</em>, <em>content</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#writetarstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.writetarstr" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>writes a string (content) in a tarfile</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="models_mapping.html" class="btn btn-neutral" title="Liens entre modèles Escapad et modèles des LMS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CultureNumerique@UnivLille.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

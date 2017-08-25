@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>toEDX &mdash; documentation cnparser 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Recherche" href="../search.html"/>
+    <link rel="top" title="documentation cnparser 1.0" href="../index.html"/>
+        <link rel="up" title="Code du module" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cnparser
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Guide d'utilisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntaxe.html">Syntaxe et structuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../models_mapping.html">Liens entre modèles Escapad et modèles des LMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_api.html">Code API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cnparser</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Code du module</a> &raquo;</li>
+        
+      <li>toEDX</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Code source de toEDX</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span><span class="p">,</span> <span class="n">BytesIO</span>
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="k">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span>
+
+<span class="kn">from</span> <span class="nn">cnparser</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cnparser.settings</span> <span class="k">import</span> <span class="n">EDX_TEMPLATES_PATH</span><span class="p">,</span> <span class="n">EDX_DEFAULT_FILES</span><span class="p">,</span> <span class="n">EDX_ADVANCED_MODULE_LIST</span><span class="p">,</span> <span class="n">EDX_GRADER_MAP</span><span class="p">,</span> <span class="n">EDX_DIRECTORY</span>
+
+<span class="n">reMediaPath</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;/\w*/media/&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">loadJinjaEnv</span><span class="p">():</span>
+    <span class="n">jenv</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">EDX_TEMPLATES_PATH</span><span class="p">))</span>
+    <span class="n">jenv</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;slugify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">cnslugify</span>
+    <span class="n">jenv</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;tohtml&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">cntohtml</span>
+    <span class="k">return</span> <span class="n">jenv</span>
+
+
+<div class="viewcode-block" id="generateEDXArchive"><a class="viewcode-back" href="../code_api.html#toEDX.generateEDXArchive">[docs]</a><span class="k">def</span> <span class="nf">generateEDXArchive</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">moduleOutDir</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Given a module object and destination dir, generate EDX archive &quot;&quot;&quot;</span>
+
+    <span class="c1"># Module data</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">advanced_EDX_module_list</span> <span class="o">=</span> <span class="n">EDX_ADVANCED_MODULE_LIST</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+
+    <span class="c1"># create EDX archive temp folder</span>
+    <span class="n">edx_outdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">moduleOutDir</span><span class="p">,</span> <span class="n">EDX_DIRECTORY</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">edx_outdir</span><span class="p">)</span>
+
+    <span class="c1"># generate content files:</span>
+    <span class="c1"># html/webcontent | problem/(Activite|ActiviteAvancee|Comprehension)</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">sec</span><span class="o">.</span><span class="n">subsections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sub</span><span class="o">.</span><span class="n">folder</span> <span class="o">==</span> <span class="s1">&#39;webcontent&#39;</span><span class="p">:</span>
+                <span class="c1"># these go to EDX/html/</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">html_src</span><span class="p">,</span>
+                                 <span class="n">edx_outdir</span><span class="p">,</span>
+                                 <span class="s1">&#39;html&#39;</span><span class="p">,</span>
+                                 <span class="n">sub</span><span class="o">.</span><span class="n">getFilename</span><span class="p">())</span>
+            <span class="k">elif</span> <span class="n">sub</span><span class="o">.</span><span class="n">folder</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;Activite&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;ActiviteAvancee&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;Comprehension&#39;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">sub</span><span class="o">.</span><span class="n">questions</span><span class="p">:</span>
+                    <span class="n">fname</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.xml&#39;</span> <span class="o">%</span> <span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">toEDX</span><span class="p">(),</span>
+                                     <span class="n">edx_outdir</span><span class="p">,</span>
+                                     <span class="s1">&#39;problem&#39;</span><span class="p">,</span>
+                                     <span class="n">fname</span><span class="p">)</span>
+
+    <span class="c1"># Add other files</span>
+    <span class="k">for</span> <span class="n">folder</span><span class="p">,</span> <span class="n">dfile</span> <span class="ow">in</span> <span class="n">EDX_DEFAULT_FILES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">EDX_TEMPLATES_PATH</span><span class="p">,</span> <span class="n">folder</span><span class="p">),</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_outdir</span><span class="p">,</span> <span class="n">folder</span><span class="p">))</span>
+
+    <span class="c1"># Render and add policies/course files</span>
+    <span class="n">course_policies_files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;grading_policy.json&#39;</span><span class="p">,</span> <span class="s1">&#39;policy.json&#39;</span><span class="p">]</span>
+
+    <span class="n">jenv</span> <span class="o">=</span> <span class="n">loadJinjaEnv</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pfile</span> <span class="ow">in</span> <span class="n">course_policies_files</span><span class="p">:</span>
+        <span class="n">pfile_template</span> <span class="o">=</span> <span class="n">jenv</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;policies&#39;</span><span class="p">,</span>
+                                                        <span class="s1">&#39;course&#39;</span><span class="p">,</span>
+                                                        <span class="n">pfile</span><span class="p">))</span>
+        <span class="n">pjson</span> <span class="o">=</span> <span class="n">pfile_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">pjson</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pjson</span><span class="p">),</span>
+                           <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                           <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;: &#39;</span><span class="p">))</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">pjson</span><span class="p">,</span>
+                         <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_outdir</span><span class="p">,</span>
+                                      <span class="s1">&#39;policies&#39;</span><span class="p">,</span>
+                                      <span class="s1">&#39;course&#39;</span><span class="p">),</span>
+                         <span class="n">pfile</span><span class="p">)</span>
+
+    <span class="c1"># Write main course.xml file</span>
+    <span class="n">course_template</span> <span class="o">=</span> <span class="n">jenv</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;course.tmpl.xml&quot;</span><span class="p">)</span>
+    <span class="n">course_xml</span> <span class="o">=</span> <span class="n">course_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">grademap</span><span class="o">=</span><span class="n">EDX_GRADER_MAP</span><span class="p">)</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">course_xml</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">edx_outdir</span><span class="p">,</span> <span class="s1">&#39;course.xml&#39;</span><span class="p">)</span>
+
+    <span class="c1"># pack it up into a tar archive</span>
+    <span class="n">archive_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">moduleOutDir</span><span class="p">,</span>
+                                <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_edx.tar.gz&#39;</span> <span class="o">%</span> <span class="n">module</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">archive_file</span><span class="p">,</span> <span class="s2">&quot;w:gz&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">afile</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">edx_outdir</span><span class="p">):</span>
+            <span class="n">tar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_outdir</span><span class="p">,</span> <span class="n">afile</span><span class="p">),</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">afile</span><span class="p">))</span>
+    <span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="generateEDXArchiveIO"><a class="viewcode-back" href="../code_api.html#toEDX.generateEDXArchiveIO">[docs]</a><span class="k">def</span> <span class="nf">generateEDXArchiveIO</span><span class="p">(</span><span class="n">module</span><span class="p">,</span>
+                         <span class="n">mediaFiles</span><span class="p">,</span>
+                         <span class="n">mediaNames</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Writes the EDX content in a zipfile and returns that zipfile.</span>
+<span class="sd">    The structure of this archive is contained in a tree /&lt;EDX_DIRECTORY&gt;/</span>
+<span class="sd">    (usually EDX_DIRECTORY=EDX) and returns the zipfile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We open the tar archive inside of the StringIO instance</span>
+    <span class="n">tarArchiveIO</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w:gz&#39;</span><span class="p">,</span> <span class="n">fileobj</span><span class="o">=</span><span class="n">tarArchiveIO</span><span class="p">)</span>
+
+    <span class="c1"># Module data</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">advanced_EDX_module_list</span> <span class="o">=</span> <span class="n">EDX_ADVANCED_MODULE_LIST</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+    <span class="c1"># edx_outdir = os.path.join(moduleOutDir, EDX_DIRECTORY)</span>
+    <span class="n">edx_archivedir</span> <span class="o">=</span> <span class="n">EDX_DIRECTORY</span>
+
+    <span class="c1"># generate content files:</span>
+    <span class="c1"># html/webcontent | problem/(Activite|ActiviteAvancee|Comprehension)</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">sec</span><span class="o">.</span><span class="n">subsections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sub</span><span class="o">.</span><span class="n">folder</span> <span class="o">==</span> <span class="s1">&#39;webcontent&#39;</span><span class="p">:</span>
+                <span class="c1"># these go to EDX/html/</span>
+                <span class="n">html</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">rebaseMediaLinks</span><span class="p">(</span><span class="s1">&#39;/static/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+                <span class="n">html_outdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_archivedir</span><span class="p">,</span>
+                                           <span class="s1">&#39;html&#39;</span><span class="p">,</span>
+                                           <span class="n">sub</span><span class="o">.</span><span class="n">getFilename</span><span class="p">())</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">writetarstr</span><span class="p">(</span><span class="n">tar</span><span class="p">,</span> <span class="n">html_outdir</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">sub</span><span class="o">.</span><span class="n">folder</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;Activite&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;ActiviteAvancee&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;Comprehension&#39;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">sub</span><span class="o">.</span><span class="n">questions</span><span class="p">:</span>
+                    <span class="n">fname</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.xml&#39;</span> <span class="o">%</span> <span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="n">problem_outdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_archivedir</span><span class="p">,</span>
+                                                  <span class="s1">&#39;problem&#39;</span><span class="p">,</span>
+                                                  <span class="n">fname</span><span class="p">)</span>
+                    <span class="n">xml</span> <span class="o">=</span> <span class="n">reMediaPath</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;/static/&#39;</span><span class="p">,</span>
+                                          <span class="n">question</span><span class="o">.</span><span class="n">toEDX</span><span class="p">())</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">writetarstr</span><span class="p">(</span><span class="n">tar</span><span class="p">,</span>
+                                      <span class="n">problem_outdir</span><span class="p">,</span>
+                                      <span class="n">xml</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mediaFiles</span><span class="p">:</span>
+        <span class="c1"># add media files in &#39;/EDX/static&#39;</span>
+        <span class="k">for</span> <span class="n">media</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mediaFiles</span><span class="p">,</span> <span class="n">mediaNames</span><span class="p">):</span>
+            <span class="n">media</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">writetarstr</span><span class="p">(</span><span class="n">tar</span><span class="p">,</span>
+                              <span class="n">edx_archivedir</span><span class="o">+</span><span class="s1">&#39;/static/&#39;</span><span class="o">+</span><span class="n">name</span><span class="p">,</span>
+                              <span class="n">media</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+    <span class="c1"># Add other files</span>
+    <span class="k">for</span> <span class="n">folder</span><span class="p">,</span> <span class="n">dfile</span> <span class="ow">in</span> <span class="n">EDX_DEFAULT_FILES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">EDX_TEMPLATES_PATH</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="n">folder</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="n">dfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">myfile</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">myfile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_archivedir</span><span class="p">,</span>
+                                     <span class="n">folder</span><span class="p">,</span>
+                                     <span class="n">dfile</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">writetarstr</span><span class="p">(</span><span class="n">tar</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Render and add policies/course files</span>
+    <span class="n">course_policies_files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;grading_policy.json&#39;</span><span class="p">,</span> <span class="s1">&#39;policy.json&#39;</span><span class="p">]</span>
+
+    <span class="n">jenv</span> <span class="o">=</span> <span class="n">loadJinjaEnv</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pfile</span> <span class="ow">in</span> <span class="n">course_policies_files</span><span class="p">:</span>
+        <span class="n">pfile_template</span> <span class="o">=</span> <span class="n">jenv</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;policies&#39;</span><span class="p">,</span>
+                                                        <span class="s1">&#39;course&#39;</span><span class="p">,</span>
+                                                        <span class="n">pfile</span><span class="p">))</span>
+        <span class="n">pjson</span> <span class="o">=</span> <span class="n">pfile_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">pjson</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pjson</span><span class="p">),</span>
+                           <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                           <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;: &#39;</span><span class="p">))</span>
+        <span class="n">json_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_archivedir</span><span class="p">,</span>
+                                 <span class="s1">&#39;policies/course&#39;</span><span class="p">,</span>
+                                 <span class="n">pfile</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">writetarstr</span><span class="p">(</span><span class="n">tar</span><span class="p">,</span> <span class="n">json_path</span><span class="p">,</span> <span class="n">pjson</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Write main course.xml file</span>
+    <span class="n">course_template</span> <span class="o">=</span> <span class="n">jenv</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;course.tmpl.xml&quot;</span><span class="p">)</span>
+    <span class="n">course_xml</span> <span class="o">=</span> <span class="n">course_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">grademap</span><span class="o">=</span><span class="n">EDX_GRADER_MAP</span><span class="p">)</span>
+    <span class="n">course_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edx_archivedir</span><span class="p">,</span>
+                               <span class="s1">&#39;course.xml&#39;</span><span class="p">)</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">writetarstr</span><span class="p">(</span><span class="n">tar</span><span class="p">,</span>
+                      <span class="n">course_path</span><span class="p">,</span>
+                      <span class="n">course_xml</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
+
+    <span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">tarArchiveIO</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CultureNumerique@UnivLille.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

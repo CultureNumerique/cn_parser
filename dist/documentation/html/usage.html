@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Guide d&#39;utilisation &mdash; documentation cnparser 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Recherche" href="search.html"/>
+    <link rel="top" title="documentation cnparser 1.0" href="index.html"/>
+        <link rel="next" title="Syntaxe et structuration" href="syntaxe.html"/>
+        <link rel="prev" title="Documentation cnparser" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cnparser
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide d'utilisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#principe-general">Principe général</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edition-du-contenu">Edition du contenu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generer-le-site-vitrine-et-les-archives">Générer le site vitrine et les archives</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#utilisation-des-programmes-de-conversion-todo">Utilisation des programmes de conversion (TODO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#importer-dans-edx">Importer dans EDX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#importer-l-ims-cc-dans-moodle">Importer l'IMS-CC dans Moodle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#afficher-les-bonnes-reponses-et-les-feedbacks-dans-le-site-vitrine">Afficher les bonnes réponses et les feedbacks dans le site vitrine</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="syntaxe.html">Syntaxe et structuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models_mapping.html">Liens entre modèles Escapad et modèles des LMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_api.html">Code API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cnparser</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Guide d'utilisation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/usage.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="guide-d-utilisation">
+<span id="guide-d-utilisation"></span><h1>Guide d'utilisation<a class="headerlink" href="#guide-d-utilisation" title="Lien permanent vers ce titre">¶</a></h1>
+<p>cnParser est une API et un ensemble de scripts pour transformer des documents rédigés en Markdown (plus quelques extensions) dans des modules pour Moodle ou EDX (des LMS ou Learning Managements Systems) ou encore pour produire un site HTML.</p>
+<div class="section" id="principe-general">
+<span id="principe-general"></span><h2>Principe général<a class="headerlink" href="#principe-general" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le principe de cnParser  consiste à transformer une arborescence de modules de cours en différents formats d'exports (mini-site web et archives pour LMS). Le point de départ est donc un dossier contenant un ou plusieurs modules de cours, appelé &quot;programme de cours&quot;, à l'instar des cours <a class="reference external" href="https://culturenumerique.univ-lille3.fr/">Culture Numérique</a> qui comprennent plusieurs modules et qui sont générés à partir des sources disponibles sur <a class="reference external" href="https://github.com/CultureNumerique/cn_modules">ce dépôt GitHub</a>.</p>
+<p>Chaque module de cours doit suivre la syntaxe qui est basée sur le format Markdown pour le contenu de cours, et sur le format GIFT pour la rédaction de quiz. Les fichiers source doivent ensuite suivre une structuration définie dans la <a class="reference external" href="syntaxe.html">section syntaxe</a>. Le résultat de l'export est un dossier contenant un mini-site Web (un dossier de fichiers HTML) reprenant tous les modules de cours et incluant les liens vers des archives IMSCC et EDX (e.g <a class="reference external" href="https://culturenumerique.univ-lille3.fr/module1.html#sec_A">réutiliser le module CultureNumerique - Internet</a> ). Pour plus de détails sur l'usage des archives EDX et IMSCC-Moodle, et les correspondances adoptés avec le modèle Esc&#64;pad, voir le chapitre  <a class="reference external" href="export.html">export</a>.</p>
+<p>L'illustration ci-dessous reprend la chaine éditoriale complète:</p>
+<ol class="simple">
+<li>Le point de départ est un fichier source au format Markdown+GIFT et structuré selon les guides Culture Numérique. Il peut s'éditer depuis n'importe quel éditeur de texte.</li>
+<li>Les fichiers sources sont synchronisés sur une plateforme git</li>
+<li>à chaque modification, le service hébérgé sur escapad.univ-lille3.fr régénère le mini-site web et les archives IMSCC-Moodle et EDX.</li>
+</ol>
+<p><img alt="workflow" src="_images/cn_workflow.jpg" /></p>
+</div>
+<div class="section" id="edition-du-contenu">
+<span id="edition-du-contenu"></span><h2>Edition du contenu<a class="headerlink" href="#edition-du-contenu" title="Lien permanent vers ce titre">¶</a></h2>
+<p>La structure d'un programme de cours est la suivante:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">module1</span><span class="o">/</span>
+  <span class="o">-</span> <span class="n">moncours</span><span class="o">.</span><span class="n">md</span>
+  <span class="o">-</span> <span class="n">media</span><span class="o">/</span>
+    <span class="o">-</span> <span class="n">uneimage</span><span class="o">.</span><span class="n">png</span>
+    <span class="o">-</span> <span class="n">image2</span><span class="o">.</span><span class="n">jpg</span>
+    <span class="o">-</span> <span class="n">logo</span><span class="o">.</span><span class="n">png</span> 
+<span class="o">-</span> <span class="n">templates</span>
+  <span class="o">-</span> <span class="n">logo</span><span class="o">.</span><span class="n">png</span>
+  <span class="o">-</span> <span class="n">title</span><span class="o">.</span><span class="n">md</span>
+  <span class="o">-</span> <span class="n">module</span><span class="o">.</span><span class="n">tmpl</span>
+  <span class="o">-</span> <span class="n">site_layout</span><span class="o">.</span><span class="n">tmpl</span>
+  <span class="o">-</span> <span class="n">index</span><span class="o">.</span><span class="n">tmpl</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>un programme de cours se décompose en &quot;modules&quot; chacun contenu dans un dossier nommé <code class="docutils literal"><span class="pre">moduleX</span></code> avec <code class="docutils literal"><span class="pre">X</span></code> le numéro de chaque module qui déterminera l'ordre dans lequel les modules sont rangés.</li>
+<li>dans chaque dossier de module, il y a un fichier d'extension <code class="docutils literal"><span class="pre">.md</span></code> (par exemple <code class="docutils literal"><span class="pre">moncours.md</span></code>) et un dossier <code class="docutils literal"><span class="pre">media</span></code> contenant les images insérées dans chaque module de cours. La syntaxe utilisé pour éditer le fichier <code class="docutils literal"><span class="pre">moncours.md</span></code> un module de cours est expliquée sur <a class="reference external" href="syntaxe.html">cette page</a></li>
+</ul>
+<p>Ensuite, pour personnaliser le mini-site qui sera généré par l'application, vous pouvez modifier les autres fichiers:</p>
+<ul class="simple">
+<li>pour personnaliser le logo remplacez le fichier <code class="docutils literal"><span class="pre">logo.png</span></code> par le fichier de votre choix que vous renommerez <code class="docutils literal"><span class="pre">logo.png|jpg|gif</span></code> en fonction du type d'image utilisée.</li>
+<li>enfin, pour personnaliser le titre de votre programme de cours, éditer le fichier <code class="docutils literal"><span class="pre">title.md</span></code> et, sans le renommer, insérez votre titre en première ligne.</li>
+<li>les fichiers <code class="docutils literal"><span class="pre">tmpl</span></code>, qui permettent de personnaliser la structure de la page d'accueil, des modules ou du site en général. Le format est celui de <a class="reference external" href="http://jinja.pocoo.org/">jinja2</a>.</li>
+</ul>
+</div>
+<div class="section" id="generer-le-site-vitrine-et-les-archives">
+<span id="generer-le-site-vitrine-et-les-archives"></span><h2>Générer le site vitrine et les archives<a class="headerlink" href="#generer-le-site-vitrine-et-les-archives" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Une fois que vous avez modifié votre contenu et mis à jour votre dépôt git, vous pouvez passer à l'étape de génération du site vitrine et des archives IMS et EDX.</p>
+<div class="section" id="utilisation-des-programmes-de-conversion-todo">
+<span id="utilisation-des-programmes-de-conversion-todo"></span><h3>Utilisation des programmes de conversion (TODO)<a class="headerlink" href="#utilisation-des-programmes-de-conversion-todo" title="Lien permanent vers ce titre">¶</a></h3>
+<p>En supposant que vous disposez d'un dossier local <code class="docutils literal"><span class="pre">mon_dossier_de_cours</span></code> contenant votre contenu de cours structuré en respectant <a class="reference external" href="usage.html">le guide d'utilisation</a> et la <a class="reference external" href="syntaxe.html">syntaxe Esc&#64;pad</a>,  le script <code class="docutils literal"><span class="pre">cnparser</span></code> vous permet d'obtenir un export Web contenant les archives importable dans Moodle ou EDX. L'usage de base est le suivant:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python cnparser.py -r chemin/vers/mon_dossier_de_cours -d /chemin/vers/dossier/cible [OPTIONS]
+</pre></div>
+</div>
+<p>Cette commande génère uniquement le mini site web reprenant tous les modules présent dans le dossier <code class="docutils literal"><span class="pre">mon_dossier_de_cours</span></code>. Les options suivantes sont disponibles (et doivent être placées à la suite de la commande ci-dessus à la place de <code class="docutils literal"><span class="pre">[OPTIONS]</span></code>):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">-m</span> <span class="pre">moduleX</span> <span class="pre">moduleY</span></code> : exporte uniquement les modules contenus dans les dossiers de module <code class="docutils literal"><span class="pre">moduleX</span></code>, <code class="docutils literal"><span class="pre">moduleY</span></code></li>
+<li><code class="docutils literal"><span class="pre">-i</span></code> : génère en plus l'archive IMSCC (IMS Common Cartridge) de chaque module de cours et la place dans le dossier d'export de chaque module avec le nom <code class="docutils literal"><span class="pre">moduleX.imscc.zip</span></code></li>
+<li><code class="docutils literal"><span class="pre">-e</span></code> : génère en plus l'archive EDX de chaque module de cours et la place dans le dossier d'export de chaque module avec le nom <code class="docutils literal"><span class="pre">moduleX_edx.tar.gz</span></code></li>
+<li><code class="docutils literal"><span class="pre">-f</span></code> : inclue les feedbacks dans l'export HTML, i.e dans le minisite.</li>
+</ul>
+</div>
+<div class="section" id="importer-dans-edx">
+<span id="importer-dans-edx"></span><h3>Importer dans EDX<a class="headerlink" href="#importer-dans-edx" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Dans le studio EDX, une fois dans la page de votre cours (la fonction &quot;créer un cours
+depuis une archive EDX&quot; n'est à notre connaissance pas encore disponible), cliquez sur &quot;importer&quot;.
+Suivez ensuite les étapes. Plus d'explications <a class="reference external" href="http://edx.readthedocs.io/projects/edx-partner-course-staff/en/latest/releasing_course/export_import_course.html">ici</a></p>
+</div>
+<div class="section" id="importer-l-ims-cc-dans-moodle">
+<span id="importer-l-ims-cc-dans-moodle"></span><h3>Importer l'IMS-CC dans Moodle<a class="headerlink" href="#importer-l-ims-cc-dans-moodle" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Esc&#64;pad peut générer un fichier <code class="docutils literal"><span class="pre">module_folder.imscc.zip</span></code> qui peut
+être importé dans Moodle en tant que cours (cf <a class="reference external" href="https://docs.moodle.org/28/en/IMS_Common_Cartridge_import_and_export">restauration d'un cours
+depuis une archive IMSCC sous Moodle</a>).</p>
+<ol class="simple">
+<li>Allez dans <em>Administration &gt; Administration du cours &gt; Restauration</em></li>
+<li>Selectionnez votre archive avec <em>Choisir un fichier..</em> ou glisser la dans l'emplacement flêché.</li>
+<li>Appuyer sur <em>RESTAURATION</em></li>
+<li>Choisissez les différentes options suivant vos préférences.</li>
+<li><strong>ATTENTION</strong> Dans la partie 4, pour ne pas perdre vos droits d'enseignant, mettez <em>'Oui'</em> pour <em>Conservez vos rôles et droits d'accès actuels</em> et oui également si vous souhaitez conserver les groupes.</li>
+<li>Votre cours s'est normalement généré.</li>
+</ol>
+<p>Cette archive contient également toutes les activités avec les questions
+associées déjà intégrées.</p>
+</div>
+<div class="section" id="afficher-les-bonnes-reponses-et-les-feedbacks-dans-le-site-vitrine">
+<span id="afficher-les-bonnes-reponses-et-les-feedbacks-dans-le-site-vitrine"></span><h3>Afficher les bonnes réponses et les feedbacks dans le site vitrine<a class="headerlink" href="#afficher-les-bonnes-reponses-et-les-feedbacks-dans-le-site-vitrine" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Il est possible d'activer l'option permettant d'afficher les réponses et les feedbacks des questions des tests inclus dans <em>tous</em> les modules pour la version Web uniquement (les autres exports LMS contiennent dans tous les cas les bonnes réponses, mais qui ne s'affichent que sous certains conditions, selon les réglages propre à votre instance de LMS).</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="syntaxe.html" class="btn btn-neutral float-right" title="Syntaxe et structuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Documentation cnparser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CultureNumerique@UnivLille.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
