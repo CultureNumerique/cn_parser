@@ -12,6 +12,7 @@ documentation/conf.py
 sample.config.json
 tests/Test.imscc.zip
 tests/outTestEDX
+tests/outTestIMS
 tests/outTestGIFT
 tests/out
 tests/dirmodule

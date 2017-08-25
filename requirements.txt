@@ -1,0 +1,25 @@
+lxml
+python-slugify
+markdown
+pygiftparser
+MarkdownSuperscript
+yattag
+beautifulsoup4
+jinja2
+requests
+
+
+# test
+mock
+python-coveralls
+coveralls
+coverage
+pytest
+pytest-pep8
+pytest-cov
+
+# used only to generate doc with Sphinx+recommonmark
+Sphinx
+sphinx-rtd-theme
+recommonmark
+
