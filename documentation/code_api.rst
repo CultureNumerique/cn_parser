@@ -104,19 +104,19 @@ Subclass of AnyActivity
     :undoc-members:
 
 
-Scripts du parser Escapad
--------------------------
+Autres modules
+--------------
 
 Here we detail the code documentation of the rest of the Escapad parser.
 
 cnparser
 ~~~~~~~~
-.. automodule:: cnExport
+.. automodule:: cnparser
   :members:
 
 fromGift
 ~~~~~~~~
-.. automodule:: fromGIFT
+.. automodule:: fromGift
   :members:
 
 toEDX
@@ -130,7 +130,7 @@ toIMS
   :members:
 
 toHTML
-~~~~~
+~~~~~~
 .. automodule:: toHTML
   :members:
 

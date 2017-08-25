@@ -198,7 +198,7 @@ class Cours(Subsection):
         self.parseMediaLinks()
 
     def parse(self, f):
-        """Read lines in file pointer 'f' until:
+        """Read lines in file pointer `f` until:
 
             - start of a new section
             - start of another subsection
@@ -231,8 +231,9 @@ class Cours(Subsection):
         """Parse instance src  and search for video matches.
         In case of a match, creates a video object and assign
         it to self.videos list attribute.
-        return True if the number of videos found is above 0,
-               False otherwise"""
+
+        :return: True if the number of videos found is greater than 0
+        """
         videos_findall = reVideosLink.findall(self.src)
         for video_match in videos_findall:
             new_video = {
