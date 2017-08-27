@@ -4,6 +4,7 @@ before_script :
   - virtualenv ../cnappenv
   - source ../cnappenv/bin/activate
   - pip install -r requirements.txt
+  - python setup.py install 
 
 script :
   - cd tests
