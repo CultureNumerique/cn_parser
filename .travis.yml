@@ -3,7 +3,7 @@ python:
   - "3.5"
   
 before_script :
-  - virtualenv ../cnappenv
+  - virtualenv -p python3.5 ../cnappenv
   - source ../cnappenv/bin/activate
   - pip install -r requirements.txt
   - python setup.py install 
