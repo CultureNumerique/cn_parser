@@ -1,10 +1,10 @@
 # About cn_parser
 
 ## TRAVIS Build
-[![Build Status](https://travis-ci.org/CultureNumerique/cn_app.svg?branch=develop)](https://travis-ci.org/CultureNumerique/cn_app)
+[![Build Status](https://travis-ci.org/CultureNumerique/cn_parser.svg?branch=develop)](https://travis-ci.org/CultureNumerique/cn_parser)
 
 ## COVERALLS Build
-[![Coverage Status](https://coveralls.io/repos/github/CultureNumerique/cn_app/badge.svg?branch=develop)](https://coveralls.io/github/CultureNumerique/cn_app?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/CultureNumerique/cn_parser/badge.svg?branch=develop)](https://coveralls.io/github/CultureNumerique/cn_parser?branch=develop)
 
 ## what it is
 Application providing services to parse Esc@pad formated files. Produces HTML websites, EDX or IMS archives.
