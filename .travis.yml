@@ -1,5 +1,7 @@
 language : python
-
+python:
+  - "3.5"
+  
 before_script :
   - virtualenv ../cnappenv
   - source ../cnappenv/bin/activate
