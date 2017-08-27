@@ -14,7 +14,7 @@ from pygiftparser import parser as pygift
 import logging
 import os
 from cnparser import model, toEDX, fromGift
-from cnparser.cnsettings import EDX_DIRECTORY
+from cnparser.settings import EDX_DIRECTORY
 # Path hack for getting access to src python modules
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

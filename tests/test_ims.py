@@ -14,7 +14,7 @@ import os
 import logging
 from pygiftparser import parser as pygift
 from cnparser import model, toIMS, fromGift
-from cnparser.cnsettings import IMS_DIRECTORY, FOLDERS
+from cnparser.settings import IMS_DIRECTORY, FOLDERS
 # Ignore Warning
 logger = logging.getLogger()
 logger.setLevel(40)

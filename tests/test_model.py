@@ -411,7 +411,7 @@ Je suis une AnyActivity {
 
     def testCourseProgram(self):
 
-        cp = model.CourseProgram('Culture Numérique','repository')
+        cp = model.CourseProgram('Culture Numérique', 'repository')
         self.assertEqual('repository', cp.repository)
         self.assertEqual([], cp.modules)
         self.assertEqual('Culture Numérique', cp.title)

@@ -90,6 +90,8 @@ def generateEDXArchive(module, moduleOutDir):
                     os.path.join(module.name, afile))
     tar.close()
 
+    return archive_file
+
 
 def generateEDXArchiveIO(module,
                          mediaFiles,

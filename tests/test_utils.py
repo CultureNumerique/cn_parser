@@ -12,6 +12,7 @@ logger.setLevel(40)
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+TEST_OUT_DIR = './out'
 
 def connection_error():
     raise requests.exceptions.ConnectionError
@@ -73,68 +74,47 @@ class UtilsTestCase(unittest.TestCase):
         self.assertFalse('_blank' in utils.add_target_blank(src2))
 
     def test_write_file(self):
-        current = os.getcwd()
+        current = TEST_OUT_DIR
         src = "My Text"
         folder = "Test_Write_File"
-        name = "New_File"
-        # NO EXCEPT
+        name = "New_File1"
+
         rt = utils.write_file(src, current, folder, name)
-        self.assertTrue('Test_Write_File/New_File' in rt)
-        self.assertTrue(os.path.isdir('./'+folder))
+        self.assertTrue(os.path.join(folder, name) in rt)
+        self.assertTrue(os.path.isdir(os.path.join(TEST_OUT_DIR, folder)))
         self.assertTrue(os.path.exists(rt))
-        try:
-            shutil.rmtree('./'+folder, ignore_errors=True)
-        except Exception:
-            pass
-        # EXCEPT
-        # TODO
 
     def test_createEmptyFile(self):
-        new_file = "./new_file"
+        new_file = os.path.join(TEST_OUT_DIR, 'new_file2')
         # CREATE FILE
         utils.create_empty_file_if_needed(new_file)
         self.assertTrue(os.path.isfile(new_file))
         # FILE ALREADY EXISTED
         utils.create_empty_file_if_needed(new_file)
         self.assertTrue(os.path.isfile(new_file))
-        if os.path.isfile(new_file):
-            os.remove(new_file)
-        # TODO : base
 
     def test_fetchMarkdownFile(self):
         self.assertTrue('./coursTest/module1/module_test.md' in utils.fetchMarkdownFile('./coursTest/module1'))
         self.assertFalse(utils.fetchMarkdownFile('./'))
 
     def test_prepareDestination(self):
-        rep1 = './testUtils'
-        utils.prepareDestination('./../', rep1)
-        for d in utils.STATIC_FOLDERS:
-            self.assertTrue(d, ('./..'+d))
-        shutil.rmtree(rep1)
-
-    def test_prepareDestinationError(self):
-        rep1 = './testUtils'
-        utils.STATIC_FOLDERS.append('static/css')
-        # with patch('shutil.copytree', new=Mock(side_effect=OSError())):
-        utils.prepareDestination('./..', rep1)
-        utils.prepareDestination('./dpzoq', rep1)
-        shutil.rmtree(rep1)
+        rep1 = os.path.join(TEST_OUT_DIR, 'testUtils1')
+        utils.prepareDestination(rep1)
+        self.assertTrue(os.path.isdir(rep1))
+        self.assertTrue(os.path.isdir(os.path.join(rep1, 'static')))
 
     def test_createDirs(self):
-        rep1 = '../testUtils'
-        folders = utils.STATIC_FOLDERS
+        rep1 = os.path.join(TEST_OUT_DIR, 'testUtils2')
+        folders = ['a', 'b', 'c']
         utils.createDirs(rep1, folders)
         for f in folders:
-            self.assertTrue(os.path.isdir(rep1+'/'+f))
-        shutil.rmtree(rep1)
+            self.assertTrue(os.path.isdir(os.path.join(rep1, f)))
 
     def test_copyMediaDirs(self):
-        utils.copyMediaDir('./coursTest', './outdir', 'module1')
-        self.assertTrue(os.path.isfile('./outdir/media/Logo_cercle_vert.svg'))
-        utils.copyMediaDir('./coursTest', './outdir', 'module1')
-        self.assertTrue(os.path.isfile('./outdir/media/Logo_cercle_vert.svg'))
-        if (os.path.isfile('./outdir/media/Logo_cercle_vert.svg')):
-            shutil.rmtree('./outdir')
+        utils.copyMediaDir('./coursTest', TEST_OUT_DIR, 'module1')
+        self.assertTrue(os.path.isfile(os.path.join(TEST_OUT_DIR,
+                                                    'media',
+                                                    'Logo_cercle_vert.svg')))
 
 
 # Main
