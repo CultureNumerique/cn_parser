@@ -16,7 +16,7 @@ from tarfile import TarInfo
 from io import BytesIO
 
 import logging
-from cnparser.settings import MARKDOWN_EXT, FOLDERS, STATIC_FOLDERS, DEFAULT_VIDEO_THUMB_URL, VIDEO_THUMB_API_URL
+from cnparser.settings import MARKDOWN_EXT, DEFAULT_VIDEO_THUMB_URL, VIDEO_THUMB_API_URL, HTML_THEMES_PATH
 
 
 def fetch_vimeo_thumb(video_link):
@@ -185,6 +185,7 @@ def copyMediaDir(repoDir, moduleOutDir, module_name):
 
 def create_empty_file_if_needed(filepath):
     """  Create an empty file filepath if it does not exist. """
+    filepath = os.path.abspath(filepath)
     if os.path.isfile(filepath):
         return
     basedir = os.path.dirname(filepath)
@@ -193,30 +194,50 @@ def create_empty_file_if_needed(filepath):
     open(filepath, 'a').close()
 
 
-def prepareDestination(BASE_PATH, outDir):
+def overloadTheme(outDir, theme_path):
+    """ Adds files in found theme_path/static to the static dir"""
+    static_in = os.path.join(theme_path, 'static')
+    if not os.path.exists(os.path.join(static_in)):
+        return
+
+    logging.info('Overloading theme')
+
+    l = len(theme_path)+1  # is it robust?
+    for root, dirs, files in os.walk(static_in):
+        r = root[l:]
+        for d in dirs:
+            destdir = os.path.join(outDir, r, d)
+            if not os.path.isdir(destdir):
+                try:
+                    os.mkdir(destdir)
+                except:
+                    logging.error("Cannot create %s " % destdir)
+        for f in files:
+            destfile = os.path.join(outDir, r, f)
+            try:
+                shutil.copy2(os.path.join(root, f),
+                             os.path.join(destfile))
+            except:
+                logging.error("cannot copy %s" % destfile)
+
+
+def prepareDestination(outDir, theme='default'):
     """ Create outDir and copy mandatory files"""
-    # first erase exising dir
     if os.path.exists(outDir):
+        logging.warning("%s already exists, going to replace it", outDir)
         shutil.rmtree(outDir)
-    if not os.path.isdir(outDir):
-        if not os.path.exists(outDir):
-            os.makedirs(outDir)
-        else:
-            print("Cannot create %s " % (outDir))
-            sys.exit(0)
-    for d in STATIC_FOLDERS:
-        """ build absolute path independant of current working dir """
-        source = os.path.join(BASE_PATH, d)
-        if (not(os.path.isdir(source))):
-            logging.error("dir %s don't exist", d)
-            return
-        dest = os.path.join(outDir, d)
+    os.makedirs(outDir)
+    # copy static files from the used theme
+    static = os.path.join(HTML_THEMES_PATH, theme, 'static')
+
+    if not os.path.isdir(static):
+        logging.warning("Incorrect theme: Static dir %s don't exist", static)
+    else:
+        dest = os.path.join(outDir, 'static')
         try:
-            shutil.copytree(source, dest)
-        except OSError:
-            logging.warning("%s already exists, going to overwrite it", d)
-            shutil.rmtree(dest)
-            shutil.copytree(source, dest)
+            shutil.copytree(static, dest)
+        except Exception:
+            logging.error('Error, cannot copy static files')
 
 
 def fetchMarkdownFile(moduleDir):

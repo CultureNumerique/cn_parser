@@ -28,7 +28,7 @@ from pygiftparser import parser as pygift
 import cnparser.fromGift  # seems unused but used for the mondey patching
 from cnparser import toIMS
 from cnparser import utils
-from cnparser.settings import MARKDOWN_EXT, DEFAULT_VIDEO_THUMB_URL, DEFAULT_BASE_URL
+from cnparser.settings import MARKDOWN_EXT, DEFAULT_VIDEO_THUMB_URL, DEFAULT_BASE_URL, DEFAULT_LOGO_MODULE
 
 
 # Regexps
@@ -548,7 +548,7 @@ class Module:
         self.language = 'fr'
         self.title = 'Titre long'
         self.menutitle = 'Titre'
-        self.logo_filename = os.path.join('static', 'img', 'help.png')
+        self.logo_filename = DEFAULT_LOGO_MODULE
         self.author = 'culture numerique'
         self.css = 'http://culturenumerique.univ-lille3.fr/css/base.css'
         self.base_url = base_url

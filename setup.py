@@ -1,12 +1,20 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from setuptools import setup
+import os
 
 try:
     long_description = open("README.rst").read()
 except IOError:
     long_description = "Application providing services to parse Esc@pad formated files. Produces HTML websites, EDX or IMS archives."
 
+# TODO : recursively build package_data
+pdata = []
+os.chdir('cnparser')
+for root, dirs, files in os.walk('templates'):
+    pdata.extend([os.path.join(root, d) for d in dirs])
+    pdata.extend([os.path.join(root, f) for f in files])
+os.chdir('..')
 
 setup(
     name="cnparser",
@@ -18,10 +26,7 @@ setup(
     author_email="first.last@univ-lille.fr",
     packages=['cnparser'],
     package_dir={'cnparser': 'cnparser'},
-    package_data={'cnparser': ['templates/toHTML/*',
-                               'templates/toEDX/*',
-                               'templates/toEDX/*/*',
-                               'templates/toEDX/*/*/*']},
+    package_data={'cnparser': pdata},
     install_requires=['lxml',
                       'yattag',
                       'markdown',

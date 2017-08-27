@@ -29,12 +29,18 @@ La structure d'un programme de cours est la suivante:
 		- uneimage.png
 		- image2.jpg
 		- logo.png 
-	- templates
+	- templates/
       - logo.png
       - title.md
+	  - home.{html,md}
 	  - module.tmpl
 	  - site_layout.tmpl
 	  - index.tmpl
+	  - static/
+	     - img/
+		 - css/
+		 - ...
+	 
 
 - un programme de cours se décompose en "modules" chacun contenu dans un dossier nommé `moduleX` avec `X` le numéro de chaque module qui déterminera l'ordre dans lequel les modules sont rangés.
 - dans chaque dossier de module, il y a un fichier d'extension `.md` (par exemple `moncours.md`) et un dossier `media` contenant les images insérées dans chaque module de cours. La syntaxe utilisé pour éditer le fichier `moncours.md` un module de cours est expliquée sur [cette page](syntaxe.html)

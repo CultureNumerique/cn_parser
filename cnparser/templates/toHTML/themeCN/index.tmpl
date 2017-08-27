@@ -1,0 +1,74 @@
+<!-- Début pages intro content -->
+<div id="content">
+    {{home_content}}
+</div>
+
+<!-- fin pages intro content -->
+
+<!-- Début page 6 -->
+<div id="page6" class="page section-even container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Modules</h1>
+			<br>
+		</div>
+	</div>
+
+	<div class="row text-center">
+	  {% for module in course.modules %}
+	  <div class="col-md-2 col-md-offset-1">
+	    <img src="{{module.logo_filename}}">
+	    <br>
+	    <strong><a href="{{module.name}}.html">{{module.menutitle}}</a></strong>
+	    <br> {{module.title}}
+	    <br>
+	    <a href="{{module.name}}.html" type="button" class="btn-even btn-even-primary btn-modules">Voir le module</a><br/>
+	    <a type="button" data-target="" href="{{module.name}}_imscc.zip" class="btn-even btn-even-primary btn-modules">Télecharger (IMSCC)</a><br/>
+	    <a type="button" data-target="" href="{{module.name}}_edx.tar.gz" class="btn-even btn-even-primary btn-modules">Télecharger (EDX)</a>
+	  </div>
+	  {% endfor %}
+	    <!-- <img src="static/img/icon_internet.svg"> 
+			<br>
+			<strong>Internet</strong>
+			<br> Bien plus que le web
+			<br>
+			<br>
+			<a href="module1.html"type="button" class="btn-even btn-even-primary btn-modules">Voir le module</a><br/>
+			<a type="button" data-target="" href="module1/module1.imscc.zip" class="btn-even btn-even-primary btn-modules">Télecharger (IMSCC)</a><br/>
+			<a type="button" data-target="" href="module1/module1_edx.tar.gz" class="btn-even btn-even-primary btn-modules">Télecharger (EDX)</a>
+		</div> -->
+
+	</div>
+</div>
+
+<!-- Fin page 6 -->
+<!-- Début page 7 -->
+<div id="page7" class="page section-odd container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Contacts</h1>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-md-6">
+			<img src="static/img/mail01.svg">
+			<br>
+			<button type="button" data-target="" class="btn-odd btn-odd-primary btn-lg email">
+				alain<span class="iamnotadot"></span>preux
+			</button>
+		</div>
+		<div class="col-md-6">
+			<img src="static/img/mail02.svg">
+			<br>
+			<button type="button" data-target="" class="btn-odd btn-odd-primary btn-lg email">
+				valerie<span class="iamnotadot"></span>duhal
+			</button>
+		</div>
+	</div>
+</div>
+<div id="footer">
+	<img src="static/img/logo_lille3.svg">
+	<img src="static/img/logo_unr.svg">
+</div>
+
+<!-- Fin page 7 -->

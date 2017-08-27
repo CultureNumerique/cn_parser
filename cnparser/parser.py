@@ -67,11 +67,12 @@ def processModule(args, source_dir, out_dir, module_name):
     # EDX files
     if args.edx:
         m.edx_archive_path = toEDX.generateEDXArchive(m, moduleOutDir)
+        logging.info('*Path to EDX = %s*' % m.edx_archive_path)
 
     # # if chosen, generate IMS archive
     if args.ims:
         m.ims_archive_path = toIMS.generateIMSArchive(m, moduleOutDir)
-        logging.warn('*Path to IMS = %s*' % m.ims_archive_path)
+        logging.info('*Path to IMS = %s*' % m.ims_archive_path)
 
     # return module object
     return m
@@ -118,6 +119,9 @@ def main():
     parser.add_argument("-r", "--repository",
                         help="Set the repository source dir containing the moduleX dirs, given as absolute or relative to cn_app dir",
                         default='repositories/culturenumerique/cn_modules')
+    parser.add_argument("-T", "--theme",
+                        help="Set the HTML theme",
+                        default='default')
     parser.add_argument("-d", "--destination",
                         help="Set the destination dir",
                         default='build')
@@ -167,21 +171,23 @@ def main():
     logging.warn("repository directory path : %s" % repoDir)
     if not(os.path.exists(repoDir)):
         sys.exit("Error : repository directory provided does not exist")
-    if ((args.destination == '.') or
-        (args.destination.rstrip('/') == os.getcwd())):
+    if (args.destination == '.') or (args.destination.rstrip('/') == os.getcwd()):
         sys.exit("Error: cannot build within current directory.")
     if os.path.isabs(args.destination):
         outDir = args.destination
     else:
         outDir = os.path.join(repoDir, args.destination)
-    utils.prepareDestination(BASE_PATH, outDir)
+
+    utils.prepareDestination(outDir, args.theme)
+
+    utils.overloadTheme(outDir, os.path.join(repoDir, 'template'))
 
     # ** Process repository **
     course_program = processRepository(args, repoDir, outDir)
 
     # ** Build site **
     if not args.no_html:
-        toHTML.buildSite(course_program, repoDir, outDir)
+        toHTML.buildSite(course_program, repoDir, outDir, args.theme)
 
     # ** Exit and print path to build files: **
     os.chdir(BASE_PATH)

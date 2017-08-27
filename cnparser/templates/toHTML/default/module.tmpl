@@ -1,0 +1,35 @@
+<div id="content">
+  <h1>{{module.menutitle}}</h1>
+  {% for section in module.sections %}
+  <h2>{{ section.title }}</h2>
+  {% for sub in section.subsections %}
+  <h3>{{ sub.title }}</h3>
+  {% if sub.videos|length > 0  %}
+  {% for video in sub.videos %}
+  <!--  TODO : check video here and add fancy text -->
+  <div class="iframe_cont">
+    {% if not firstsec %}{% include 'player_button.html'%}{%endif%}
+    <iframe allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen="" {% if not firstsec %}data-{%endif%}src="{{video.video_src_link}}"
+            {%if not firstsec%}style="display:none"{%endif%}></iframe></div>
+  {% endfor %}
+  {% endif %}
+  {{ sub.html_src}}
+  {% endfor %}
+  {% endfor %}
+
+  <!-- download section here -->
+  <div class="annexes">
+    <h1>Annexe : réutiliser ce module</h1>
+    {% if module.ims_archive_path %}
+    <p>Archive IMS CC utilisable dans les LMS Moodle, Claroline, Blackboard, etc:
+      <a href="{{module.module}}/{{module.ims_archive_path}}">{{module.ims_archive_path}}</a>
+    </p>
+    {%endif%}
+    {% if module.edx_archive_path %}
+    <p>Archive EDX :
+      <a href="{{module.module}}/{{module.edx_archive_path}}">{{module.edx_archive_path}}</a>
+    </p>
+    {%endif%}
+  </div>
+</div>
+<!--Content -->

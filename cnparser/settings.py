@@ -14,10 +14,10 @@ IMS_DIRECTORY = 'IMS'
 # folders associated with activity types
 FOLDERS = ['Activite', 'ActiviteAvancee', 'Comprehension', 'webcontent']
 
-HTML_TEMPLATES_PATH = os.path.join(BASE_PATH, 'templates', 'toHTML')
-STATIC_FOLDERS = ['static/js', 'static/img', 'static/svg',
-                  'static/css', 'static/fonts']
-
+LOGO_EXTENSIONS = ['png', 'jpg', 'gif']
+HTML_THEMES_PATH = os.path.join(BASE_PATH, 'templates', 'toHTML')
+DEFAULT_THEME_PATH = os.path.join(HTML_THEMES_PATH, 'default')
+DEFAULT_LOGO_MODULE = os.path.join('static', 'img', 'module.svg')
 VIDEO_THUMB_API_URL = 'https://vimeo.com/api/v2/video/'
 DEFAULT_VIDEO_THUMB_URL = 'https://i.vimeocdn.com/video/536038298_640.jpg'
 DEFAULT_BASE_URL = 'http://culturenumerique.univ-lille3.fr'
@@ -40,4 +40,3 @@ EDX_GRADER_MAP = {
     'Comprehension': 'Comprehension',
     'webcontent': None
 }
-

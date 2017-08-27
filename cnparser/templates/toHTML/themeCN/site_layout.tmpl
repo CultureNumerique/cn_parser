@@ -13,7 +13,7 @@
     <!-- onepage css -->
     {% if body_class == 'home' %}
     <link href="static/css/onepage.css" rel="stylesheet">
-    {% elif body_class == 'modules' %}
+    {% elif body_class == 'modules' or body_class == 'single' %}
     <link href="static/css/modules.css" rel="stylesheet">
     {% endif %}
     <!-- Icones -->
@@ -35,46 +35,54 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="index.html">
-                  {% if logo == 'default'%}
-                      <img class="hidden-xs logo" class="logo" src="static/img/logo_plat_vert.svg" alt="">
-                  {% else %}
-                      <img class="hidden-xs logo" class="logo" src="{{logo}}" alt="">
-                  {% endif %}
-                  <img class="visible-xs logo" src="static/img/logo_cercle_vert.svg" alt="">
+                  <img class="hidden-xs logo" class="logo" src="{{logo}}" alt="logo">
+                  <img class="visible-xs logo" src="static/img/logo_cercle_vert.svg" alt="logoxs">
                 </a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="">
-                        <a href="index.html">
-                            <img src="static/img/home.svg" style="width:1.8em; height:1.8em; padding-right:0.5em; margin-top:-0.25em;">Présentation</a>
+              <ul class="nav navbar-nav">
+		{% if body_class != "single" %}
+                <li class="">
+                  <a href="index.html">
+                    <img src="static/img/home.svg" style="width:1.8em; height:1.8em; padding-right:0.5em; margin-top:-0.25em;">Présentation</a>
+                </li>
+                <li>
+                  <a href="index.html#page7">
+                    <img src="static/img/contact.svg" style="width:2.5em; height:2.5em; padding-right:0.5em; margin-top:-0.60em; margin-bottom:-0.5em;">Contact</a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img src="static/img/modules.svg" style="width:3.5em; height:3.5em; padding-right:0.5em; margin-top:-0.90em; margin-bottom:-10px;">Modules
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% for module in course.modules %}
+                    <li class="btnmodules {{module.class}}">
+                      <a href="{{ module.name }}.html">{{module.menutitle}}</a>
+                      <!-- <p class="subbtnmodules">{{module.title}}</p> -->
                     </li>
-                    <li>
-                        <a href="index.html#page7">
-                            <img src="static/img/contact.svg" style="width:2.5em; height:2.5em; padding-right:0.5em; margin-top:-0.60em; margin-bottom:-0.5em;">Contact</a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <img src="static/img/modules.svg" style="width:3.5em; height:3.5em; padding-right:0.5em; margin-top:-0.90em; margin-bottom:-10px;">Modules
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            {% for module in course.modules %}
-                            <li class="btnmodules {{module.class}}">
-                                <a href="{{ module.module }}.html">{{module.menutitle}}</a>
-                                <!-- <p class="subbtnmodules">{{module.title}}</p> -->
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                </ul>
+                    {% endfor %}
+                  </ul>
+                </li>
+		{% endif %}
+              </ul>
             </div>
             <!--/.nav-collapse -->
         </div>
     </nav>
-    {{content}}
-    
-      
+    <!-- end of fixed top navbar -->
+    {% block main_content %}
+      {{ content | safe }}
+
+    {% endblock %}
+    <!-- Début footer -->
+    <!-- <footer>
+        <a href="https://www.univ-lille3.fr/">
+            <img src="static/svg/logo_lille3.svg" title="" alt="Lille 3" />
+        </a>
+        <p><a href="http://culturenumerique.univ-lille3.fr/" title="Culture Numérique">{{ course.title }}</a> - 2015</p>
+    </footer> -->
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -85,7 +93,15 @@
     {% else %}
     <script src="static/js/modules.js"></script>
     {% endif %}
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+            $('.email').click(function() {
+                login = $(this).html().replace('<span class="iamnotadot"></span>', '.')
+        		window.location.href = 'mailto:' + login + '@univ-lille3.fr';
+        	});
+        });
+    </script>
 
-    
 </body>
 </html>
