@@ -6,7 +6,8 @@ import os
 import logging
 
 from cnparser import utils
-from cnparser.settings import HTML_THEMES_PATH, DEFAULT_THEME_PATH, MARKDOWN_EXT, LOGO_EXTENSIONS
+from cnparser.settings import HTML_THEMES_PATH, \
+    DEFAULT_THEME_PATH, MARKDOWN_EXT, LOGO_EXTENSIONS
 
 
 def getMeta(repoDir, theme_path=None, single=False):
@@ -29,7 +30,8 @@ def getMeta(repoDir, theme_path=None, single=False):
     meta['index'] = jenv.get_template("index.tmpl")
 
     # if found, copy logo.png, else use default
-    logo_files = [os.path.join(b, "logo."+e) for b in list_base_path for e in LOGO_EXTENSIONS]
+    logo_files = [os.path.join(b, "logo."+e)
+                  for b in list_base_path for e in LOGO_EXTENSIONS]
     for lpath in logo_files:
         if os.path.exists(lpath):
             meta['logo'] = lpath

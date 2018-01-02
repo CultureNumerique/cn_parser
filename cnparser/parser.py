@@ -12,7 +12,7 @@ from cnparser import toIMS
 from cnparser import toEDX
 from cnparser import toHTML
 from cnparser import model
-from cnparser.settings import BASE_PATH, LOGFILE
+from cnparser.settings import BASE_PATH, LOGFILE, DEFAULT_BASE_URL
 
 
 def writeHtml(module, outModuleDir, html):
@@ -41,7 +41,7 @@ def processModule(args, source_dir, out_dir, module_name):
     # Fetch and parse md file
     filein = utils.fetchMarkdownFile(moduleDir)
     with open(filein, encoding='utf-8') as md_file:
-        m = model.Module(md_file, module_name, args.baseUrl)
+        m = model.Module(md_file, module_name, args.baseURL)
 
     # check if there is a logo
     logopath = os.path.join(moduleDir, "logo.png")
@@ -117,8 +117,7 @@ def main():
     parser.add_argument("-L", "--logfile", dest="logfile",
                         help="log file.", default=LOGFILE)
     parser.add_argument("-r", "--repository",
-                        help="Set the repository source dir containing the moduleX dirs, given as absolute or relative to cn_app dir",
-                        default='repositories/culturenumerique/cn_modules')
+                        help="Set the repository source dir containing the moduleX dirs, given as absolute or relative to cn_app dir",)
     parser.add_argument("-T", "--theme",
                         help="Set the HTML theme",
                         default='default')
@@ -128,9 +127,9 @@ def main():
     parser.add_argument("-t", "--title",
                         help="Title of the course program",
                         default='Culture numérique')
-    parser.add_argument("-u", "--baseUrl",
-                        help="Set the base url for absolute url building",
-                        default='http://culturenumerique.univ-lille3.fr')
+    parser.add_argument("-u", "--baseURL",
+                        help="Set the base URL (default is '.'; '' sets "+DEFAULT_BASE_URL+')',
+                        default='./')
     parser.add_argument("-f", "--feedback",
                         action='store_true',
                         help="Add feedbacks for all questions in web export",
@@ -164,14 +163,21 @@ def main():
                         level=getattr(logging, args.logLevel))
 
     # ** Paths and directories **
+    if args.repository is None:
+        args.repository = os.getcwd()
     if os.path.isabs(args.repository):
         repoDir = args.repository
     else:
         repoDir = os.path.join(BASE_PATH, args.repository)
+    if args.baseURL == '':
+        args.baseURL = DEFAULT_BASE_URL
+    elif args.baseURL.endswith('/'):
+        args.baseURL = args.baseURL[:-1]
     logging.warn("repository directory path : %s" % repoDir)
     if not(os.path.exists(repoDir)):
         sys.exit("Error : repository directory provided does not exist")
-    if (args.destination == '.') or (args.destination.rstrip('/') == os.getcwd()):
+    if (args.destination == '.') or (args.destination.rstrip('/')
+                                     == os.getcwd()):
         sys.exit("Error: cannot build within current directory.")
     if os.path.isabs(args.destination):
         outDir = args.destination

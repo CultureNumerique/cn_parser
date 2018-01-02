@@ -83,7 +83,7 @@ def generateEDXArchive(module, moduleOutDir):
 
     # pack it up into a tar archive
     archive_file = os.path.join(moduleOutDir,
-                                ('%s_edx.tar.gz' % module.name))
+                                ('%s.edx.tar.gz' % module.name))
     with tarfile.open(archive_file, "w:gz") as tar:
         for afile in os.listdir(edx_outdir):
             tar.add(os.path.join(edx_outdir, afile),

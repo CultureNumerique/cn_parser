@@ -23,6 +23,7 @@
         {% endfor %}
         <!-- Stop ici un item déployable -->
         <!-- Link to Annexe  -->
+        {% if module.ims_archive_path or module.edx_archive_path %}
         <div class="annex-sep"></div>
         <li class="panel panel-default">
             <h4 class="panel-title">
@@ -37,6 +38,7 @@
                 </li>
             </ul>
         </li>
+	{% endif %}
     </ul>
     <!--  bouton chevron "gauche" pour replier menu gauche-->
     <button type="button" class="navmenu-fixed-left navmenu-fixed-left navbar-offcanvas-toggle menugauchebtn collapsed hidden-md hidden-lg" data-toggle="offcanvas"  data-canvas="div.content" data-target="#menugauche"  id="menugauche-sm-left">
@@ -102,26 +104,28 @@
             {% endfor %}
         </section>
         {% endfor %}
-        <!-- download section here -->
+            <!-- download section here -->
+        {% if module.ims_archive_path or module.edx_archive_path %}
         <section  id="sec_A">
             <h1 class="icon-section title blue">Annexe : réutiliser ce module</h1>
             {% if module.ims_archive_path %}
               <section id="subsec_A1">
                   <p>
-		    <a href="{{module.name}}/{{module.name}}_imscc.zip"> Archive IMS CC utilisable dans les LMS Moodle, Claroline, Blackboard, etc:</a> 
+		    <a href="{{module.name}}/{{module.name}}.imscc.zip"> Archive IMS CC utilisable dans les LMS Moodle, Claroline, Blackboard, etc:</a> 
                   </p>
 
               </section>
-            {%endif%}
+            {% endif %}
             {% if module.edx_archive_path %}
               <section id="subsec_A1">
                   <p>
-                      <a href="{{module.name}}/{{module.name}}_edx.tar.gz">Archive EDX</a>
+                      <a href="{{module.name}}/{{module.name}}.edx.tar.gz">Archive EDX</a>
                   </p>
 
               </section>
             {%endif%}
         </section>
+        {% endif %}
 
     </div>
     <!-- Fin contenu droite -->

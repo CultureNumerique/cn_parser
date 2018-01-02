@@ -3,7 +3,6 @@ from __future__ import division
 
 
 import os
-import sys
 import shutil
 import requests
 import markdown
@@ -16,7 +15,8 @@ from tarfile import TarInfo
 from io import BytesIO
 
 import logging
-from cnparser.settings import MARKDOWN_EXT, DEFAULT_VIDEO_THUMB_URL, VIDEO_THUMB_API_URL, HTML_THEMES_PATH
+from cnparser.settings import MARKDOWN_EXT, DEFAULT_VIDEO_THUMB_URL, \
+    VIDEO_THUMB_API_URL, HTML_THEMES_PATH
 
 
 def fetch_vimeo_thumb(video_link):

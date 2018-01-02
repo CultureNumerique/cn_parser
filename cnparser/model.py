@@ -21,14 +21,15 @@ import markdown
 import yattag
 import logging
 from inspect import isclass
-import os.path
+# import os.path
 from slugify import slugify
 from pygiftparser import parser as pygift
 
 import cnparser.fromGift  # seems unused but used for the mondey patching
 from cnparser import toIMS
 from cnparser import utils
-from cnparser.settings import MARKDOWN_EXT, DEFAULT_VIDEO_THUMB_URL, DEFAULT_BASE_URL, DEFAULT_LOGO_MODULE
+from cnparser.settings import MARKDOWN_EXT, DEFAULT_VIDEO_THUMB_URL, \
+    DEFAULT_BASE_URL, DEFAULT_LOGO_MODULE
 
 
 # Regexps
@@ -205,7 +206,7 @@ class Cours(Subsection):
             - start of a new (checked) activity
         """
         self.lastLine = f.readline()
-        while self.lastLine and not reStartSection.match(self.lastLine) and not reStartSubsection.match(self.lastLine) :
+        while self.lastLine and not reStartSection.match(self.lastLine) and not reStartSubsection.match(self.lastLine):
             # Is it really the end of the section?
             # blocks that are not activities are included!
             match = reStartActivity.match(self.lastLine)
@@ -477,20 +478,6 @@ class Section:
         for sub in self.subsections:
             sub.toHTML(feedback_option)
 
-
-    # # FIXME: is this usefull ??
-    # def toCourseHTML(self):
-    #     """Loops through Cours subsections only.
-    #
-    #     :rtype: a string concatenating subsections HTML output
-    #     """
-    #     courseHTML = ""
-    #     for sub in self.subsections:
-    #         if isinstance(sub, Cours):
-    #             courseHTML += "\n\n<!-- Subsection "+sub.num+" -->\n"
-    #             courseHTML += markdown.markdown(sub.src, MARKDOWN_EXT)
-    #     return courseHTML
-
     def toGift(self):
         """Returns a concatenation (text string) of the GIFT source code of
         all questions of all activities in this section"""
@@ -550,7 +537,7 @@ class Module:
         self.menutitle = 'Titre'
         self.logo_filename = DEFAULT_LOGO_MODULE
         self.author = 'culture numerique'
-        self.css = 'http://culturenumerique.univ-lille3.fr/css/base.css'
+        self.css = base_url+'/css/base.css'
         self.base_url = base_url
         self.parse(f)
         self.act_counter = {c.__name__: c.actnum for c in [Comprehension,
