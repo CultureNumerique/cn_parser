@@ -58,7 +58,7 @@ class EDXArchiveTestCase(unittest.TestCase):
 
         lfiles = ['/EDX/course.xml',
                   '/EDX/about/overview.html',
-                  '/tests_edx.tar.gz',
+                  '/tests.edx.tar.gz',
                   '/EDX/assets/assets.xml',
                   '/EDX/info/updates.html']
         for f in [TEST_EDX_DIR+s for s in lfiles]:

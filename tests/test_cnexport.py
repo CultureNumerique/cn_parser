@@ -45,7 +45,7 @@ class CnExportTestCase(unittest.TestCase):
     def test_processModule(self):
         # SET UP
         args = argparse.Namespace()
-        args.baseUrl = 'http://example.com'
+        args.baseURL = 'http://example.com'
         args.feedback = False
         args.no_gift = False
         args.no_video = False

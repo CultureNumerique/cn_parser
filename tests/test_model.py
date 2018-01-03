@@ -47,7 +47,7 @@ class FctParserTestCase(unittest.TestCase):
         {
         "author": "culture numerique",
         "base_url": "http://culnu.fr",
-        "css": "http://culturenumerique.univ-lille3.fr/css/base.css",
+        "css": "http://culnu.fr/css/base.css",
         "language": "fr",
         "menutitle": "Titre",
         "name": "culnu",
